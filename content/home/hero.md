@@ -17,4 +17,4 @@ advanced:
 ---
 
 ## by Lasse Ishøi,
-#### physiotherapist, Sport Scientist, PhD
+#### Physiotherapist, Sport Scientist, PhD
