@@ -30,7 +30,7 @@ role: Head of Sport Science at Football Club Nordsjælland (a Danish first tier 
 social:
 - icon: envelope
   icon_pack: fas
-  link: /#contact
+  link: li@fcn.dk
 - display:
     header: true
   icon: twitter

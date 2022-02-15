@@ -129,11 +129,10 @@ The variance of the distribution is $\sigma^{2}$.
     
     <item>
       <title>AS Profile</title>
-      <link>https://lasseishoi.netlify.app/project/internal-project/</link>
+      <link>https://lasseishoi.netlify.app/project/insitupackage/</link>
       <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/project/internal-project/</guid>
-      <description>&lt;p&gt;The goal of InSituASProfile is to provide an easy way to calculate the insitu sprint acceleration-speed profile based on gps data using the method described by Morin et al. 2021 published in Journal of Biomechanics, DOI: 10.1016/j.jbiomech.2021.110524&lt;/p&gt;
-</description>
+      <guid>https://lasseishoi.netlify.app/project/insitupackage/</guid>
+      <description></description>
     </item>
     
     <item>
@@ -280,7 +279,7 @@ data.head()
 &lt;p&gt;Demo:&lt;/p&gt;
 
 
-&lt;div id=&#34;chart-614958273&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-415263798&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -290,7 +289,7 @@ data.head()
       clearInterval( a );
 
       Plotly.d3.json(&#34;./line-chart.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-614958273&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-415263798&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();
@@ -721,14 +720,6 @@ $$&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/discussions&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Ask&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>External Project</title>
-      <link>https://lasseishoi.netlify.app/project/external-project/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/project/external-project/</guid>
-      <description></description>
     </item>
     
     <item>

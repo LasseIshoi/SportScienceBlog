@@ -19,5 +19,3 @@ url_pdf: ""
 url_slides: ""
 url_video: ""
 ---
-
-The goal of InSituASProfile is to provide an easy way to calculate the insitu sprint acceleration-speed profile based on gps data using the method described by Morin et al. 2021 published in Journal of Biomechanics, DOI: 10.1016/j.jbiomech.2021.110524

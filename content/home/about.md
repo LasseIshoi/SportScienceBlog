@@ -21,7 +21,7 @@ author: admin
 
 design:
   background:
-    color: 'navy'
+    color: '#0B103C'
     # Text color (true=light, false=dark, or remove for the dynamic theme color). 
     text_color_light: true
 ---

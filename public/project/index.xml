@@ -14,18 +14,9 @@
     
     <item>
       <title>AS Profile</title>
-      <link>https://lasseishoi.netlify.app/project/internal-project/</link>
+      <link>https://lasseishoi.netlify.app/project/insitupackage/</link>
       <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/project/internal-project/</guid>
-      <description>&lt;p&gt;The goal of InSituASProfile is to provide an easy way to calculate the insitu sprint acceleration-speed profile based on gps data using the method described by Morin et al. 2021 published in Journal of Biomechanics, DOI: 10.1016/j.jbiomech.2021.110524&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>External Project</title>
-      <link>https://lasseishoi.netlify.app/project/external-project/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/project/external-project/</guid>
+      <guid>https://lasseishoi.netlify.app/project/insitupackage/</guid>
       <description></description>
     </item>
     
