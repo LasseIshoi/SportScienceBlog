@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Projects | LISportScience</title>
-    <link>https://LasseIshoi.github.io/project/</link>
-      <atom:link href="https://LasseIshoi.github.io/project/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://lasseishoi.netlify.app/project/</link>
+      <atom:link href="https://lasseishoi.netlify.app/project/index.xml" rel="self" type="application/rss+xml" />
     <description>Projects</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 15 Feb 2022 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://LasseIshoi.github.io/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <url>https://lasseishoi.netlify.app/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
       <title>Projects</title>
-      <link>https://LasseIshoi.github.io/project/</link>
+      <link>https://lasseishoi.netlify.app/project/</link>
     </image>
     
     <item>
       <title>AS Profile</title>
-      <link>https://LasseIshoi.github.io/project/internal-project/</link>
+      <link>https://lasseishoi.netlify.app/project/internal-project/</link>
       <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://LasseIshoi.github.io/project/internal-project/</guid>
+      <guid>https://lasseishoi.netlify.app/project/internal-project/</guid>
       <description>&lt;p&gt;The goal of InSituASProfile is to provide an easy way to calculate the insitu sprint acceleration-speed profile based on gps data using the method described by Morin et al. 2021 published in Journal of Biomechanics, DOI: 10.1016/j.jbiomech.2021.110524&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>External Project</title>
-      <link>https://LasseIshoi.github.io/project/external-project/</link>
+      <link>https://lasseishoi.netlify.app/project/external-project/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>https://LasseIshoi.github.io/project/external-project/</guid>
+      <guid>https://lasseishoi.netlify.app/project/external-project/</guid>
       <description></description>
     </item>
     

@@ -1,3 +1,3 @@
 User-agent: *
 
-Sitemap: https://LasseIshoi.github.io/sitemap.xml
+Sitemap: https://lasseishoi.netlify.app/sitemap.xml
