@@ -8,7 +8,7 @@ links:
 - icon: github
   icon_pack: fab
   name: Link to Package
-  url: https://github.com/LasseIshoi/ASProfile
+  url: https://lasseishoi.github.io/InSituASProfile/index.html
 slides:
 summary: A simple package to calculate the insitu Acceleration Speed Profile from GPS measures.
 tags:

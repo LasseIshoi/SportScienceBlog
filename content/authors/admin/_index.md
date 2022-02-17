@@ -54,6 +54,6 @@ I am an aspiring researcher, physiotherapist, and sports scientist with a great 
 
 I am a PhD student in SORC-C focusing on non-operative treatment of young patients with activity-related longstanding hip and groin pain as well as evaluating outcomes following hip arthroscopy.
 
-I serve as the Sports Science Coordinator in Football Club Nordsjælland (FCN), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to Scouted Football (https://www.scoutedftbl.com/best-young-football-players/academies/), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
+I serve as the Head of Sport Science in Football Club Nordsjælland (FCN), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to Scouted Football (https://www.scoutedftbl.com/best-young-football-players/academies/), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
 
 {{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/resume.pdf" "newtab" >}}resumé{{< /staticref >}}.
