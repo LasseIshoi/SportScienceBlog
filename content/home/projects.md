@@ -45,3 +45,6 @@ design:
     # Text color (true=light, false=dark, or remove for the dynamic theme color). 
     text_color_light: false
 ---
+
+A collection of my R packages. These are light weight packages mainly developed for my own daily practice.  
+Feel free to hit the link and download a package. 
