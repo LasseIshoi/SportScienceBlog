@@ -22,29 +22,50 @@ date_format: Jan 2006
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
-  - title: CEO
-    company: GenCoin
-    company_url: ''
-    company_logo: org-gc
-    location: California
-    date_start: '2021-01-01'
+  - title: Head of Sport Science
+    company: Football Club Nordsjælland
+    company_url: 'https://fcn.dk/'
+    company_logo: FCN_logo
+    location: Farum
+    date_start: '2022-06-01'
     date_end: ''
     description: |2-
         Responsibilities include:
         
-        * Analysing
-        * Modelling
-        * Deploying
+        * Leading the Sport Science Group
+        * Data collection
+        * Data analyses
+
+  - title: Sport Science Coordinator
+    company: Football Club Nordsjælland
+    company_url: 'https://fcn.dk/'
+    company_logo: FCN_logo
+    location: Farum
+    date_start: '2021-03-01'
+    date_end: '2022-06-01'
+    description: |2-
+        Responsibilities include:
         
-  - title: Professor of Semiconductor Physics
-    company: University X
-    company_url: ''
-    company_logo: org-x
-    location: California
-    date_start: '2016-01-01'
-    date_end: '2020-12-31'
-    description: Taught electronic engineering and researched semiconductor physics.
+        * Formulating the sport science strategy
+        * Hire interns
+        * Support physical coaches through data analyses
+        
+  - title: PhD student (Femoroacetabular impingement syndrome)
+    company: Sports Orthepedic Research Center - Copenhagen (SORC-C), Hvidovre Hospital
+    company_url: 'https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx'
+    company_logo: SORC-C
+    location: Copenhagen
+    date_start: '2018-01-01'
+    date_end: '2021-01-01'
+    description: "Research related to hip-related pain (femoroacetabular impingement syndrome) and outcome after hip arthroscopy.       
+    **PhD Thesis:** Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return to Sport, and Hip MUscle Strength after Hip Arthroscopy."
 
 design:
   columns: '2'
+  
+design:
+  background:
+    color: '#E1E4F7'
+    # Text color (true=light, false=dark, or remove for the dynamic theme color). 
+    text_color_light: false
 ---

@@ -15,7 +15,7 @@ education:
   - course: BSc in Physiotherapy
     institution: Copenhagen University College, Metropolitan
     year: 2015
-email: ""
+email: "li@fcn.dk"
 highlight_name: true
 interests:
 - Muscle Injuries
@@ -50,8 +50,10 @@ superuser: true
 title: Lasse Ishøi
 ---
 
-Alice Bighetti is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries. I am part of the Sports Orthopedic Research Center - Copenhagen (SORC-C) at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+I am a PhD student in SORC-C focusing on non-operative treatment of young patients with activity-related longstanding hip and groin pain as well as evaluating outcomes following hip arthroscopy.
+
+I serve as the Sports Science Coordinator in Football Club Nordsjælland (FCN), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to Scouted Football (https://www.scoutedftbl.com/best-young-football-players/academies/), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
 
 {{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/resume.pdf" "newtab" >}}resumé{{< /staticref >}}.

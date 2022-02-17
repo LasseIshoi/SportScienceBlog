@@ -38,4 +38,10 @@ design:
 
   # For Showcase view, flip alternate rows?
   flip_alt_rows: true
+  
+  design:
+  background:
+    color: '#E1E4F7'
+    # Text color (true=light, false=dark, or remove for the dynamic theme color). 
+    text_color_light: false
 ---

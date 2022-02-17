@@ -128,6 +128,14 @@ The variance of the distribution is $\sigma^{2}$.
     </item>
     
     <item>
+      <title></title>
+      <link>https://lasseishoi.netlify.app/publication/2022-02-15-/</link>
+      <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2022-02-15-/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>AS Profile</title>
       <link>https://lasseishoi.netlify.app/project/insitupackage/</link>
       <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
@@ -140,6 +148,26 @@ The variance of the distribution is $\sigma^{2}$.
       <link>https://lasseishoi.netlify.app/post/sports-science/</link>
       <pubDate>Tue, 15 Feb 2022 00:00:00 +0000</pubDate>
       <guid>https://lasseishoi.netlify.app/post/sports-science/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lasse</title>
+      <link>https://lasseishoi.netlify.app/post/2022-02-14-/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/post/2022-02-14-/</guid>
+      <description>
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-14-/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+</description>
+    </item>
+    
+    <item>
+      <title>Hip adduction strength and provoked groin pain: A comparison of long-lever squeeze testing using the ForceFrame and the Copenhagen 5-Second-Squeeze test</title>
+      <link>https://lasseishoi.netlify.app/publication/squeeze-vs-forceframe/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/squeeze-vs-forceframe/</guid>
       <description></description>
     </item>
     
@@ -279,7 +307,7 @@ data.head()
 &lt;p&gt;Demo:&lt;/p&gt;
 
 
-&lt;div id=&#34;chart-415263798&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;div id=&#34;chart-925347618&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
 &lt;script&gt;
   (function() {
     let a = setInterval( function() {
@@ -289,7 +317,7 @@ data.head()
       clearInterval( a );
 
       Plotly.d3.json(&#34;./line-chart.json&#34;, function(chart) {
-        Plotly.plot(&#39;chart-415263798&#39;, chart.data, chart.layout, {responsive: true});
+        Plotly.plot(&#39;chart-925347618&#39;, chart.data, chart.layout, {responsive: true});
       });
     }, 500 );
   })();

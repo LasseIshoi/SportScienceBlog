@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Per Holmich | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/per-holmich/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/per-holmich/index.xml" rel="self" type="application/rss+xml" />
+    <description>Per Holmich</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Sat, 01 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <title>Per Holmich</title>
+      <link>https://lasseishoi.netlify.app/author/per-holmich/</link>
+    </image>
+    
+    <item>
+      <title>Hip adduction strength and provoked groin pain: A comparison of long-lever squeeze testing using the ForceFrame and the Copenhagen 5-Second-Squeeze test</title>
+      <link>https://lasseishoi.netlify.app/publication/squeeze-vs-forceframe/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/squeeze-vs-forceframe/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
