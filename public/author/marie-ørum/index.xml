@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Marie Ørum | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/marie-%C3%B8rum/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/marie-%C3%B8rum/index.xml" rel="self" type="application/rss+xml" />
+    <description>Marie Ørum</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
+      <title>Marie Ørum</title>
+      <link>https://lasseishoi.netlify.app/author/marie-%C3%B8rum/</link>
+    </image>
+    
+    <item>
+      <title>How Many Patients Achieve an Acceptable Symptom State After Hip Arthroscopy for Femoroacetabular Impingement Syndrome? A Cross-sectional Study Including PASS Cutoff Values for the HAGOS and iHOT-33</title>
+      <link>https://lasseishoi.netlify.app/publication/2022-02-18-pass-after-hip-arthroscopy/</link>
+      <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2022-02-18-pass-after-hip-arthroscopy/</guid>
+      <description>
+&lt;script src=&#34;https://lasseishoi.netlify.app/publication/2022-02-18-pass-after-hip-arthroscopy/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;abstract&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Background&lt;/strong&gt;&lt;br /&gt;
+Hip arthroscopy is a viable treatment for femoroacetabular impingement syndrome (FAIS). Clinically relevant improvements in hip function and pain after surgery are often reported, but it is less clear how many patients achieve an acceptable symptom state (Patient Acceptable Symptom State [PASS]).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Purpose&lt;/strong&gt;&lt;br /&gt;
+To investigate the proportion of patients who achieved a PASS 12 to 24 months after hip arthroscopy and to determine the cutoff scores of the 2 recommended and valid patient-reported outcome measures (the subscales of the Copenhagen Hip and Groin Outcome Score [HAGOS] and the International Hip Outcome Tool—33 [iHOT-33]) for which patients are most likely to achieve PASS.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Study Design&lt;/strong&gt;&lt;br /&gt;
+Cohort study; Level of evidence, 3.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Methods&lt;/strong&gt;&lt;br /&gt;
+Eligible study patients were identified in the Danish Hip Arthroscopy Registry. An electronic questionnaire was used to collect data on PASS, HAGOS, and iHOT-33 12 to 24 months after surgery. PASS was measured using an anchor question. Receiver operating characteristic curve analyses were applied to identify the PASS cutoff values of HAGOS and iHOT-33 scores.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Results&lt;/strong&gt;&lt;br /&gt;
+A total of 137 individuals (mean age at surgery, 35.4 ± 9.4 years) were included in the study at a mean follow-up of 18.5 ± 3.2 months after surgery. At follow-up, 64 individuals (46.7%; 95% CI, 38.6-55.1) reported PASS. Higher HAGOS and iHOT-33 values were observed for participants who reported PASS compared with those who did not report PASS (Cohen d ≥ 1.06; P &amp;lt; .001). Cutoff scores for HAGOS subscales (42.5-82.5) and iHOT-33 (67.00) showed excellent to outstanding discriminative ability in predicting PASS (area under the curve, 0.82-0.92).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;br /&gt;
+In total, 46% of individuals having hip arthroscopy for FAIS achieved PASS at 12 to 24 months of follow-up. Patients who achieved PASS had statistically significant and substantially better self-reported hip function compared with those who did not achieve PASS. Cutoff values at HAGOS subscales and iHOT-33 showed excellent to outstanding discriminative ability in predicting patients with PASS.&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

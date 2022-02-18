@@ -1,0 +1,55 @@
+---
+author_notes:
+- 
+- 
+-
+-
+-
+-
+-
+authors:
+- admin 
+- Mathias Nielsen 
+- Kasper Krommes
+- Rasmus Husted
+- Per Hôlmich
+- Lisbeth Pedersen
+- Kristian Thorborg
+date: "2021-09-01T00:00:00Z"
+doi: ""
+featured: false
+image:
+  caption: 
+  focal_point: ""
+  preview_only: false
+projects: []
+publication: 'British Journal of Sports Medicine. Doi.org/10.1136/bjsports-2021-104060'
+publication_short: ""
+publication_types:
+- "2"
+publishDate: "2021-09-01T00:00:00Z"
+slides: 
+summary: 
+tags:
+- Femoroacetabular Impingement Syndrome
+- Systematic review
+title: "Femoroacetabular impingement syndrome and labral injuries: grading the evidence on diagnosis and non-operative treatment—a statement paper commissioned by the Danish Society of Sports Physical Therapy (DSSF)"
+url_code: ""
+url_dataset: ""
+url_pdf: ""
+url_poster: ""
+url_project: ""
+url_slides: ""
+url_source: https://bjsm.bmj.com/content/55/22/1301.long
+url_video: ""
+---
+
+# Abstract
+
+This statement summarises and appraises the evidence on diagnostic tests and clinical information, and non-operative treatment of femoroacetabular impingement (FAI) syndrome and labral injuries. We included studies based on the highest available level of evidence as judged by study design. We evaluated the certainty of evidence using the Grading of Recommendations Assessment Development and Evaluation framework.   
+
+We found 29 studies reporting 23 clinical tests and 14 different forms of clinical information, respectively. Restricted internal hip rotation in 0° hip flexion with or without pain was best to rule in FAI syndrome (low diagnostic effectiveness; low quality of evidence; interpretation of evidence: may increase post-test probability slightly), whereas no pain in Flexion Adduction Internal Rotation test or no restricted range of motion in Flexion Abduction External Rotation test compared with the unaffected side were best to rule out (very low to high diagnostic effectiveness; very low to moderate quality of evidence; interpretation of evidence: very uncertain, but may reduce post-test probability slightly). No forms of clinical information were found useful for diagnosis.  
+
+For treatment of FAI syndrome, 14 randomised controlled trials were found. Prescribed physiotherapy, consisting of hip strengthening, hip joint manual therapy techniques, functional activity-specific retraining and education showed a small to medium effect size compared with a combination of passive modalities, stretching and advice (very low to low quality of evidence; interpretation of evidence: very uncertain, but may slightly improve outcomes). Prescribed physiotherapy was, however, inferior to hip arthroscopy (small effect size; moderate quality of evidence; interpretation of evidence: hip arthroscopy probably increases outcome slightly).  
+
+For both domains, the overall quality of evidence ranged from very low to moderate indicating that future research on diagnosis and treatment may alter the conclusions from this review.

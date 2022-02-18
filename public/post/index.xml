@@ -7,10 +7,22 @@
     <description>Posts</description>
     <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Thu, 17 Feb 2022 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://lasseishoi.netlify.app/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_3.png</url>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
       <link>https://lasseishoi.netlify.app/post/</link>
     </image>
+    
+    <item>
+      <title>hello</title>
+      <link>https://lasseishoi.netlify.app/post/hello/</link>
+      <pubDate>Thu, 17 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/post/hello/</guid>
+      <description>
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/hello/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+</description>
+    </item>
     
     <item>
       <title>Welcome to my blog</title>

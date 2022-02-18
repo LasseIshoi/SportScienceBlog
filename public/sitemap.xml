@@ -16,7 +16,9 @@
   <url>
     <loc>https://lasseishoi.netlify.app/event/</loc><lastmod>2030-06-01T13:00:00+00:00</lastmod></url>
   <url>
-    <loc>https://lasseishoi.netlify.app/post/</loc><lastmod>2022-02-17T13:18:49+01:00</lastmod></url>
+    <loc>https://lasseishoi.netlify.app/post/hello/</loc><lastmod>2022-02-17T20:07:07+01:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/post/</loc><lastmod>2022-02-17T20:07:07+01:00</lastmod></url>
   <url>
     <loc>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</loc><lastmod>2022-02-17T13:18:49+01:00</lastmod></url>
   <url>
@@ -30,7 +32,7 @@
   <url>
     <loc>https://lasseishoi.netlify.app/tag/groin/</loc><lastmod>2022-01-01T00:00:00+00:00</lastmod></url>
   <url>
-    <loc>https://lasseishoi.netlify.app/publication/squeeze-vs-forceframe/</loc><lastmod>2022-01-01T00:00:00+00:00</lastmod></url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-squeeze-versus-forceframe/</loc><lastmod>2022-01-01T00:00:00+00:00</lastmod></url>
   <url>
     <loc>https://lasseishoi.netlify.app/author/juan-penalver/</loc><lastmod>2022-01-01T00:00:00+00:00</lastmod></url>
   <url>
@@ -56,9 +58,61 @@
   <url>
     <loc>https://lasseishoi.netlify.app/tags/</loc><lastmod>2022-01-01T00:00:00+00:00</lastmod></url>
   <url>
+    <loc>https://lasseishoi.netlify.app/tag/letter-to-the-editor/</loc><lastmod>2021-10-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/nordic-hamstring/</loc><lastmod>2021-10-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-letter-to-the-editor-nhe/</loc><lastmod>2021-10-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/femoroacetabular-impingement-syndrome/</loc><lastmod>2021-09-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-fai-statement/</loc><lastmod>2021-09-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/lisbeth-pedersen/</loc><lastmod>2021-09-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/rasmus-husted/</loc><lastmod>2021-09-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/systematic-review/</loc><lastmod>2021-09-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/hip-arthroscopy/</loc><lastmod>2021-05-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/joanne-kemp/</loc><lastmod>2021-05-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-rfd-post-op-fai/</loc><lastmod>2021-05-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/michael-reiman/</loc><lastmod>2021-05-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/rate-of-force-development/</loc><lastmod>2021-05-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/football/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/hamstring/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-hamstring-and-quadriceps-strength-profiles/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/jacob-penalver/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/per-aagaard/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/quadriceps/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/strength-profiles/</loc><lastmod>2021-04-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-pass-after-hip-arthroscopy/</loc><lastmod>2021-03-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/author/marie-%C3%B8rum/</loc><lastmod>2021-03-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/patient-acceptable-symptom-state/</loc><lastmod>2021-03-01T00:00:00+00:00</lastmod></url>
+  <url>
     <loc>https://lasseishoi.netlify.app/courses/</loc><lastmod>2021-01-24T00:00:00+00:00</lastmod></url>
   <url>
     <loc>https://lasseishoi.netlify.app/courses/example/</loc><lastmod>2021-01-24T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/copenhagen-adduction/</loc><lastmod>2021-01-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/publication/2022-02-18-copenhagen-adduction-editorial/</loc><lastmod>2021-01-01T00:00:00+00:00</lastmod></url>
+  <url>
+    <loc>https://lasseishoi.netlify.app/tag/editorial/</loc><lastmod>2021-01-01T00:00:00+00:00</lastmod></url>
   <url>
     <loc>https://lasseishoi.netlify.app/slides/</loc><lastmod>2019-02-05T00:00:00+00:00</lastmod></url>
   <url>
