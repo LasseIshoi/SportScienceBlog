@@ -5,12 +5,7785 @@
     <link>https://lasseishoi.netlify.app/post/</link>
       <atom:link href="https://lasseishoi.netlify.app/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Thu, 17 Feb 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 08 Mar 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
       <link>https://lasseishoi.netlify.app/post/</link>
     </image>
+    
+    <item>
+      <title>How to tidy Second Spectrum Physical Splits csv files</title>
+      <link>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</link>
+      <pubDate>Tue, 08 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</guid>
+      <description>
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/lightable/lightable.css&#34; rel=&#34;stylesheet&#34; /&gt;
+
+
+&lt;p&gt;Working as a sport scientist requires handling of data from many different external sources. One of these may be from the &lt;strong&gt;&lt;a href=&#34;https://www.secondspectrum.com/index.html&#34;&gt;Second Spectrum&lt;/a&gt;&lt;/strong&gt;, a match video tracking and analytics provider for many major leagues, including the Danish Superliga.&lt;/p&gt;
+&lt;p&gt;While Second Spectrum provides a basic overview of physical match data across teams and players in the league, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses i R, why a saw the need to develop a small R package to transform the exported csv files into a tidy format.&lt;/p&gt;
+&lt;p&gt;I this blog post I provide a walkthrough of the data cleaning and manipulation process of the &lt;strong&gt;&lt;a href=&#34;https://lasseishoi.github.io/TidySpectrum/&#34;&gt;TidySpectrum package&lt;/a&gt;&lt;/strong&gt;. &lt;img src=&#34;TidySpectrum.png&#34; alt=&#34;screen reader text&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;In relation to this, a big shout out to the &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ&#34;&gt;TidyX Screencast&lt;/a&gt;&lt;/strong&gt; by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=R8LK1SNH9p0&amp;amp;list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&amp;amp;index=4&#34;&gt;clean ugly excel files&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;I am certain that the data cleaning and manipulation process/code can be done way more elegantly than what I ended up with, but it does the job which for me is the most important success criteria.&lt;/p&gt;
+&lt;p&gt;Second Spectrum give access to different physical data files, of which I am most interested in the Physical Splits summery, which essentially provides 5 minutes spilts of different running metrics for all players at both teams, including for each team.&lt;/p&gt;
+&lt;p&gt;Let us first have a look at the top 50 rows of the csv file as it appear if you import it into R using the &lt;code&gt;read_csv&lt;/code&gt; function. In the first few rows you have some meta-data with information on the date and which two teams played each other, followed by some velocity threshold definitions. A few rows later there is an embedded header representing the minute splits followed by TeamA (including metrics) and all players for that particular team (including metrics for each player). It is obvious that this is not a data structure/format suited for analyses.&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Second Spectrum Split Data
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…2
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…3
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…4
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…5
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…6
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…7
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…8
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…9
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…10
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…11
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+…12
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…13
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…14
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…15
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…16
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…17
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…18
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…19
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…20
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…21
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…22
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB : 2022-2-25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+02f1d5a7-7ac5-4419-b4ba-85da99a08241
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Threshold key (km/h)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking : 7
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging : 15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+LowSpeedRunning : 20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+HighSpeedRunning : 25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+LowSpeedSprinting : &amp;gt;25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Minute Splits
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+45.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+55.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+60.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+65.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+70.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+75.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+80.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+85.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+90.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+95.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5055.29
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6226.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4779.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6256.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6158.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6707.47
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4424.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6307.07
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6533.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5019.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6221.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4411.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3918.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6728.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4948.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6567.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5974.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5178.85
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1810.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1799.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1716.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1763.50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2013.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1839.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1450.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1807.72
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1706.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1742.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1812.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1490.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1605.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1472.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1852.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1841.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1791.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1530.23
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2251.22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2555.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1765.35
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3319.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2872.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3550.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1857.71
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3200.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2922.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2479.05
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3102.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1797.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3567.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3217.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1440.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3332.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2048.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3040.14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2813.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2557.16
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+639.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1158.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+829.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+911.66
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+886.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+971.75
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+750.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+917.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1209.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+664.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+929.80
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+595.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1149.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+995.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+683.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1029.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+824.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1082.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+699.21
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+692.46
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+255.56
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.33
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+347.24
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+228.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+279.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+307.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+292.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+411.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+357.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+414.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+240.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+388.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+542.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+297.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+336.63
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+98.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+172.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+120.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+105.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+47.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+113.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+83.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+114.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.27
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+63.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+81.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+125.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+152.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.36
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+166.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+183.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+138.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+223.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+252.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+187.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+251.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+134.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+221.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+116.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+151.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+231.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+203.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+214.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+258.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+184.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+286.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+294.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+319.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+315.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+265.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+243.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+332.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+181.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+304.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+323.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+164.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+316.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+209.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+302.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+266.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+128.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+82.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+99.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+103.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+111.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+113.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+132.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+117.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+118.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+74.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+114.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+86.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+117.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+90.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+95.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+45.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+27.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+433.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+538.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+380.62
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+527.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+539.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+640.61
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+431.45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+570.49
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+359.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+396.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+607.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+82.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.73
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+154.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+142.57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+216.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+169.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+177.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+186.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+176.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.55
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+199.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+233.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+321.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+235.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+362.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+229.87
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+312.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+128.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+174.69
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+309.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+52.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+49.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+92.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+60.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+58.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+75.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+119.60
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+51.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+70.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+57.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.63
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+39.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.08
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.83
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+21.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+33.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+32.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 2 (cac92521-ef78-4bc5-8f78-2c9121037b6a)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+287.22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+550.73
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+532.54
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+44.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+187.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+119.25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+138.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+243.50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+274.79
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+67.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+104.38
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+69.87
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.87
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.83
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7.28
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;For transforming this csv file into a tidy format, I first extracted the important meta-data (teams and date) as values and subsequnetly deleted the top 12 rows.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#extract the value in the first column and row in a new data frame
+ Match_data &amp;lt;- data_sample[1,1]
+
+#Since the Match_data now contains both Team and date in a single column, I separate the column into two columns 
+  Match_data &amp;lt;- Match_data %&amp;gt;%
+    separate(col = &amp;quot;Second Spectrum Split Data&amp;quot;, into = c(&amp;quot;match&amp;quot;, &amp;quot;date&amp;quot;), sep = &amp;quot; : &amp;quot;)
+
+#and subsequently store each value
+  match &amp;lt;- Match_data$match
+  date &amp;lt;- Match_data$date
+
+#then delete the inital 12 rows of the data frame
+  data_skip &amp;lt;- data_sample %&amp;gt;%
+    slice(13:max(nrow(data_sample)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The new data frame now looks like this (top 10 rows):&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+Second Spectrum Split Data
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…2
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…3
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…4
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…5
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…6
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…7
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…8
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…9
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…10
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…11
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+…12
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…13
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…14
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…15
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…16
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…17
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…18
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…19
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…20
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…21
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+…22
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Minute Splits
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+45.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+55.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+60.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+65.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+70.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+75.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+80.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+85.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+90.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+95.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5055.29
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6226.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4779.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6256.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6158.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6707.47
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4424.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6307.07
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6533.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5019.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6221.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4411.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3918.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6728.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4948.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6567.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5974.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5178.85
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1810.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1799.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1716.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1763.50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2013.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1839.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1450.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1807.72
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1706.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1742.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1812.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1490.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1605.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1472.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1852.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1841.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1791.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1530.23
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2251.22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2555.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1765.35
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3319.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2872.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3550.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1857.71
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3200.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2922.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2479.05
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3102.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1797.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3567.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3217.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1440.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3332.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2048.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3040.14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2813.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2557.16
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+639.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1158.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+829.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+911.66
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+886.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+971.75
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+750.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+917.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1209.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+664.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+929.80
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+595.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1149.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+995.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+683.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1029.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+824.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1082.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+699.21
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+692.46
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+255.56
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.33
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+347.24
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+228.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+279.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+307.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+292.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+411.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+357.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+414.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+240.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+388.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+542.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+297.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+336.63
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+98.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+172.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+120.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+105.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+47.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+113.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+83.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+114.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.27
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+63.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+81.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+125.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+152.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.36
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+166.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+183.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+138.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+223.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+252.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+187.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+251.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+134.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+221.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+116.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+151.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+231.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+203.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+214.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+258.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+184.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+286.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+294.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+319.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+315.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+265.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+243.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+332.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+181.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+304.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+323.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+164.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+316.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+209.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+302.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+266.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As the rows “Minute Splits” mark the points for each team, I identified the row numbers where this occured and then splitted the data frame in two, one for each team.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Using the which function to identify row numbers for Minute Spilts, which mark the separation of the two teams
+  splits &amp;lt;- which(data_skip$`Second Spectrum Split Data` == &amp;quot;Minute Splits&amp;quot;)
+
+#Using the row numbers to slice the data frame and two splits, one for each team
+  data_split_1 &amp;lt;- data_skip %&amp;gt;%
+    slice(splits[1]:(splits[2]-1))
+
+  data_split_2 &amp;lt;- data_skip %&amp;gt;%
+    slice(splits[2]:max(nrow(data_skip)))
+
+#Combine in a list
+  list_split_team &amp;lt;- list(data_split_1, data_split_2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that data from the two teams are in seperate date frames contained in a list, I can use the &lt;code&gt;map&lt;/code&gt; function from the &lt;code&gt;purrr&lt;/code&gt;package to apply functions across all list elements. This makes the coding less repetitive.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#I first move the first row up to become column names, remove empty rows/columns, and clean column names since (this is important this there are two splits with 50) using the janitor package. change first row to col names, remove emply rows and/or columns, and create unique colnames, rename, and add row numbers for breaks
+  list_split_team &amp;lt;- list_split_team %&amp;gt;%
+    map(function(x){row_to_names(x, 1)}) %&amp;gt;%
+    map(function(x){remove_empty(x)}) %&amp;gt;%
+    map(function(x){clean_names(x)}) %&amp;gt;%
+#I then rename the first column from minute split, which was the name of the row, to metric, which then contains the different running measures
+    map(function(x){rename(x, metric = minute_splits)}) %&amp;gt;%
+#I create a new column with row number, which I need to cut a data frame in chunks containing a player each 
+    map(function(x){mutate(x, row_number = row_number())}) %&amp;gt;%
+#I create a new column with the value from the first column and row (that the the team name)
+    map(function(x) {mutate(x, &amp;quot;team_sep&amp;quot; = x[[1,1]])}) %&amp;gt;%
+#For each team/player the running based metrics are contained in 12 rows, so I use the cut function to mark cuts every 12th rows
+    map(function(x){mutate(x, cuts = cut(x$row_number, breaks = (max(nrow(x))/12)))}) %&amp;gt;%
+#I also mark the initial 12 rows versus the remaining rows and label those &amp;quot;group&amp;quot; and &amp;quot;individual&amp;quot; to mark whether the metrics a based on a team or individual level
+    map(function(x){mutate(x, level = cut(x$row_number, breaks = c(0,12, max(nrow(x))), labels = c(&amp;quot;group&amp;quot;, &amp;quot;individual&amp;quot;)))})
+
+#I then create a data from each team
+  data_split_1 &amp;lt;- list_split_team[[1]]
+  data_split_2 &amp;lt;- list_split_team[[2]]
+
+
+#split each data frame based on the cuts for each player, so I end up with two lists - one for each team each containing separate data frames for each player
+  list_team_1 &amp;lt;- data_split_1 %&amp;gt;%
+    group_split(cuts)
+  list_team_2 &amp;lt;- data_split_2 %&amp;gt;%
+    group_split(cuts)
+
+#and finally combine those two lists into a single list 
+  list_team_combined &amp;lt;- append(list_team_1, list_team_2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Each data frame for an individual player now looks like this:&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+metric
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x5
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x10
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x15
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x20
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x25
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x30
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x35
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x40
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x45
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x50
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x50_2
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x55
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x60
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x65
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x70
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x75
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x80
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x85
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x90
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x95
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+row_number
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+team_sep
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+cuts
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+level
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+NA
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+433.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+538.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+380.62
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+527.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+539.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+640.61
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+431.45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+570.49
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+359.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+396.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+607.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+82.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.73
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+154.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+142.57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+216.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+169.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+177.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+186.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+176.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.55
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+199.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+233.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+321.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+235.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+362.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+229.87
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+312.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+128.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+174.69
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+309.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+52.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+49.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+92.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+60.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+58.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+75.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+119.60
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+51.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+70.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+57.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.63
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+39.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.08
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.83
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+21.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+33.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+32.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+21
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+23
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The next step is to separate the athlete name from the metric column and then clean all the NA values of the first row.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#mutate a new variable &amp;quot;id&amp;quot; based on first row/column (identifier name) in each data frame 
+  list_team_combined &amp;lt;- list_team_combined  %&amp;gt;%
+    map(function(x) {mutate(x, &amp;quot;id&amp;quot; = x[[1,1]])}) %&amp;gt;%
+#and omit all na to clean data frames
+    map(function(x){na.omit(x)})&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that the name has been mutated to a new column, we are slowly approaching a tidy data format, that now looks like this:&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+metric
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x5
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x10
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x15
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x20
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x25
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x30
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x35
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x40
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x45
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x50
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x50_2
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x55
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x60
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x65
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x70
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x75
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x80
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x85
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x90
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+x95
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+row_number
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+team_sep
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+cuts
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+level
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+id
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+433.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+538.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+380.62
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+527.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+539.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+640.61
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+431.45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+570.49
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+359.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+396.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+607.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+82.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.73
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+154.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+142.57
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+216.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+169.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+177.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+149.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+186.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+165.85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+176.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.55
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+199.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+233.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+321.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+235.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+362.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+150.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+327.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+229.87
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+312.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+128.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+174.69
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+309.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+52.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+49.12
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+92.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+60.03
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+58.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+75.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+119.60
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+51.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+70.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+14.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+57.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+38.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.63
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+39.98
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.08
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+7.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.83
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+17.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+13.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+19.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+29.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+26.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+18.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+21.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+33.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+25.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+15.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+32.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+16.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+21
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+12.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+8.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+9.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+23
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+0
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+24
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A (62da2c6c-67c5-4478-bcda-34aa58075367)
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+(12.8,24.7]
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+individual
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;I now bind lists back into a single data frame, and clean up the table so that column names etc. makes sense.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#bind lists into dateframe
+  df_data_combined &amp;lt;- list_team_combined %&amp;gt;%
+    bind_rows()
+
+#separate team/player name from identifier (the numbers/characters contained in brackets after each player/team name)
+  df_data_combined  &amp;lt;- df_data_combined  %&amp;gt;%
+    separate(col = id, into = c(&amp;quot;id&amp;quot;, NA), sep = &amp;quot;[(]&amp;quot;) %&amp;gt;%
+    separate(col = team_sep, into = c(&amp;quot;team&amp;quot;, NA), sep = &amp;quot;[(]&amp;quot;)
+  
+#delete unnecessary columns, columns that are no longer needed (row_number and cuts)
+  df_data_combined &amp;lt;- df_data_combined %&amp;gt;%
+    select(-c(&amp;quot;row_number&amp;quot;, &amp;quot;cuts&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We now need to tidy up the column names (splits) and label first and second half.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#First select the the first half data set. This can be achieved by selecting the columns from the &amp;quot;metric&amp;quot; to the &amp;quot;x50_2&amp;quot; subsequently deleting the &amp;quot;x50_2&amp;quot; column as this belongs to the second half. We need to do it this way, since the last column of the first half also contains &amp;quot;x50&amp;quot;.
+  df_data_combined_first &amp;lt;- df_data_combined %&amp;gt;%
+    select(metric:ends_with(&amp;quot;2&amp;quot;)) %&amp;gt;%
+    select(-(ends_with(&amp;quot;2&amp;quot;)))
+
+#select second half data (from &amp;quot;x50_2&amp;quot; to &amp;quot;id&amp;quot; columns)
+  df_data_combined_second &amp;lt;- df_data_combined %&amp;gt;%
+    select(ends_with(&amp;quot;2&amp;quot;):id)
+
+#In each of the two data frames we now change &amp;quot;x&amp;quot; to &amp;quot;first_&amp;quot; or &amp;quot;second_&amp;quot;, respectively, to label the period in the game. This is not necessary, but give some nice oppurtunity to finter on half once we turn the data into a tidy format
+  names(df_data_combined_first) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;first_&amp;quot;, names(df_data_combined_first))
+
+#change x to second
+  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;_2&amp;quot;, &amp;quot;&amp;quot;, names(df_data_combined_second))
+  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;second_&amp;quot;, names(df_data_combined_second))
+
+#bind columns from the two data frames back to single dataframe
+  df_data_combined &amp;lt;- bind_cols(df_data_combined_first, df_data_combined_second)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The data frame now looks like this:&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+metric
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_5
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_10
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_15
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_20
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_25
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_30
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_35
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_40
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_45
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+first_50
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_50
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_55
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_60
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_65
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_70
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_75
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_80
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_85
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_90
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+second_95
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+team
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+level
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+id
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5055.29
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6226.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4779.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6256.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6158.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6707.47
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4424.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6307.07
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6533.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5019.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6221.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4411.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3918.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6728.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4948.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6567.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5974.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5178.85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1810.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1799.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1716.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1763.50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2013.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1839.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1450.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1807.72
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1706.15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1742.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1812.52
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1490.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1605.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1472.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1852.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1841.09
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1791.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2010.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1530.23
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2251.22
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2555.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1765.35
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3319.02
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2872.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3550.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1857.71
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3200.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2922.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2479.05
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3102.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1797.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3567.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3217.58
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1440.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3332.68
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2048.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3040.14
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2813.82
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+2557.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+639.64
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1158.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+829.90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+911.66
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+886.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+971.75
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+750.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+917.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1209.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+664.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+929.80
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+595.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1149.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+995.77
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+683.30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1029.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+824.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+1082.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+699.21
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+692.46
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+255.56
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+540.33
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+347.24
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+228.39
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+279.01
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.04
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+317.76
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+307.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+582.44
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.59
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+292.96
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+411.97
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+357.26
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+414.37
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+240.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+388.81
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.32
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+542.70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+297.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+336.63
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Sprinting Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+98.11
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+172.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+120.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+34.16
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+105.93
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.18
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+47.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+113.65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+10.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+83.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+114.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.27
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+63.92
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+81.28
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+125.84
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+42.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+110.42
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+152.79
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+62.36
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Walking Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+166.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+183.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+138.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+223.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+252.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+140.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+234.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+187.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+251.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+134.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+221.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+116.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+241.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+151.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+231.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+203.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+188.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Jogging Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+214.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+258.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+184.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+286.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+294.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+319.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+192.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+315.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+265.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+243.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+332.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+181.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+304.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+323.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+164.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+316.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+209.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+302.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+266.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+247.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Low Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+128.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+82.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+99.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+103.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+111.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+113.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+132.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+73.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+117.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+79.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+123.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+118.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+74.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+114.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+86.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+117.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+90.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+95.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+High Speed Running Count
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+45.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+30.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+50.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+11.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+28.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+22.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+35.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+20.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+40.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+27.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+31.00
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The final step is now to turn the data frame into a long format and clean the last part, eg. first_5&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#use the pivot longer to change from wide to long format based on all numeric columns (all columns containing split values)
+  df_data_long &amp;lt;- df_data_combined %&amp;gt;%
+    pivot_longer(cols = where(is.numeric), names_to = &amp;quot;split&amp;quot;, values_to = &amp;quot;value&amp;quot;)
+
+#separate the row names with split labels (eg. first_5) into two columns with &amp;quot;half&amp;quot; (first and second, respectively) and &amp;quot;splits&amp;quot; (eg. 5, 10, 10 etc.)
+  df_data_long &amp;lt;- df_data_long %&amp;gt;%
+    separate(col = split, into = c(&amp;quot;half&amp;quot;, &amp;quot;splits&amp;quot;), sep = &amp;quot;_&amp;quot;) %&amp;gt;%
+    mutate(match = match,
+           date = date)
+  
+#change the data column from character string to date format
+  df_data_long$date &amp;lt;- as.Date(df_data_long$date)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The final tidy data frame now look like this ready to be analysed in R (initial 20 rows showed):&lt;/p&gt;
+&lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+metric
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+team
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+level
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+id
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+half
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+splits
+&lt;/th&gt;
+&lt;th style=&#34;text-align:right;&#34;&gt;
+value
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+match
+&lt;/th&gt;
+&lt;th style=&#34;text-align:left;&#34;&gt;
+date
+&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+5
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5055.29
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6226.41
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+15
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4779.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+20
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6256.74
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+25
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6158.10
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+30
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6707.47
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+35
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4424.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6307.07
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+45
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6533.86
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+first
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5019.99
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+50
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6221.51
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+55
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4411.40
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+60
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.67
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+65
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6702.17
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+70
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+3918.89
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+75
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6728.53
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+80
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+4948.54
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+6567.48
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+90
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5974.13
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Total Distance
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+group
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+Team A
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+second
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+95
+&lt;/td&gt;
+&lt;td style=&#34;text-align:right;&#34;&gt;
+5178.85
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+TeamA - TeamB
+&lt;/td&gt;
+&lt;td style=&#34;text-align:left;&#34;&gt;
+2022-02-25
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Last part was to wrap it all into a function and finally package. The above outline takes only one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy.&lt;/p&gt;
+&lt;p&gt;I welcome any feedback/suggestions for improvements of the code, but for now it gets the job done.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>hello</title>
@@ -21,25 +7794,6 @@
 &lt;script src=&#34;https://lasseishoi.netlify.app/post/hello/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
-</description>
-    </item>
-    
-    <item>
-      <title>Welcome to my blog</title>
-      <link>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</link>
-      <pubDate>Thu, 17 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</guid>
-      <description>
-&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Welcome to my personal site. I am a physiotherapist, Sport Scientist, and PhD candidate.&lt;/p&gt;
-&lt;p&gt;This page serves the purpose of an online resume, blog, and sharing my own R packages that may be useful for the sport scientist. You will also find my list of publications which concentrate on hip/groin-related pain (PhD topic) and sports performance.&lt;/p&gt;
-&lt;p&gt;I am part of the Sports Orthopedic Research Center - Copenhagen (SORC - C) where my main research topic is femoroacetabular impingement and hip arthroscopy, in which area I have published several papers aiming at understanding the outcomes after hip arthroscopy.&lt;/p&gt;
-&lt;div class=&#34;figure&#34;&gt;
-&lt;img src=&#34;FootballPitch.png&#34; alt=&#34;&#34; /&gt;
-&lt;p class=&#34;caption&#34;&gt;screen reader text&lt;/p&gt;
-&lt;/div&gt;
 </description>
     </item>
     
