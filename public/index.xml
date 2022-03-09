@@ -129,13 +129,13 @@ The variance of the distribution is $\sigma^{2}$.
     
     <item>
       <title>How to tidy Second Spectrum Physical Splits csv files</title>
-      <link>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</link>
+      <link>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</link>
       <pubDate>Tue, 08 Mar 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/post/2022-02-17-welcome/</guid>
+      <guid>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</guid>
       <description>
-&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://lasseishoi.netlify.app/post/2022-02-17-welcome/index.en_files/lightable/lightable.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/kePrint/kePrint.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/lightable/lightable.css&#34; rel=&#34;stylesheet&#34; /&gt;
 
 
 &lt;p&gt;Working as a sport scientist requires handling of data from many different external sources. One of these may be from the &lt;strong&gt;&lt;a href=&#34;https://www.secondspectrum.com/index.html&#34;&gt;Second Spectrum&lt;/a&gt;&lt;/strong&gt;, a match video tracking and analytics provider for many major leagues, including the Danish Superliga.&lt;/p&gt;
@@ -7897,18 +7897,6 @@ TeamA - TeamB
 &lt;/table&gt;
 &lt;p&gt;Last part was to wrap it all into a function and finally package. The above outline takes only one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy.&lt;/p&gt;
 &lt;p&gt;I welcome any feedback/suggestions for improvements of the code, but for now it gets the job done.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>hello</title>
-      <link>https://lasseishoi.netlify.app/post/hello/</link>
-      <pubDate>Thu, 17 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/post/hello/</guid>
-      <description>
-&lt;script src=&#34;https://lasseishoi.netlify.app/post/hello/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
 </description>
     </item>
     

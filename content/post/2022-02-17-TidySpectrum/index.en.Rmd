@@ -17,18 +17,18 @@ projects: []
 ---
 Working as a sport scientist requires handling of data from many different external sources. One of these may be from the __[Second Spectrum](https://www.secondspectrum.com/index.html)__, a match video tracking and analytics provider for many major leagues, including the Danish Superliga.  
 
-While Second Spectrum provides a basic overview of physical match data across teams and players in the league, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses i R, why a saw the need to develop a small R package to transform the exported csv files into a tidy format.  
+While Second Spectrum provides a basic overview of physical match data across teams and players in the league via their cloud solution, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses in R, why a saw the need to develop a small R package for transforming the exported csv files into a tidy format to make my life easier.   
 
-I this blog post I provide a walkthrough of the data cleaning and manipulation process of the __[TidySpectrum package](https://lasseishoi.github.io/TidySpectrum/)__.  ![screen reader text](TidySpectrum.png)
+In this blog post I provide a walkthrough of the data cleaning and manipulation process of the __[TidySpectrum package](https://lasseishoi.github.io/TidySpectrum/)__.  ![screen reader text](TidySpectrum.png)
 
 
 In relation to this, a big shout out to the __[TidyX Screencast](https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ)__ by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to __[clean ugly excel files](https://www.youtube.com/watch?v=R8LK1SNH9p0&list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&index=4)__.  
 
 I am certain that the data cleaning and manipulation process/code can be done way more elegantly than what I ended up with, but it does the job which for me is the most important success criteria.  
 
-Second Spectrum give access to different physical data files, of which I am most interested in the Physical Splits summery, which essentially provides 5 minutes spilts of different running metrics for all players at both teams, including for each team.  
+Second Spectrum gives access to different physical data files, of which I am most interested in the Physical Splits, which essentially provides 5 minute splits of different running metrics for all players at both teams, including aggregated for each team.  
 
-Let us first have a look at the top 50 rows of the csv file as it appear if you import it into R using the `read_csv` function. In the first few rows you have some meta-data with information on the date and which two teams played each other, followed by some velocity threshold definitions. A few rows later there is an embedded header representing the minute splits followed by TeamA (including metrics) and all players for that particular team (including metrics for each player). It is obvious that this is not a data structure/format suited for analyses. 
+Let us first have a look at the top 50 rows of the csv file as it appear if you import it into R using the `read_csv` function. In the first few rows you have some meta-data with information on the date and which two teams played each other, followed by some velocity threshold definitions. A few rows later there is an embedded header representing the minute splits followed by TeamA (including metrics) and all players for that particular team (including metrics for each player), and so fourth for TeamB. It is obvious that this is not a data structure/format suited for analyses. 
 
 ```{r SecondSpectrum csv, echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -49,7 +49,7 @@ kableExtra::kable(data_sample_head) %>%
 
 ```
 
-For transforming this csv file into a tidy format, I first extracted the important meta-data (teams and date) as values and subsequnetly deleted the top 12 rows.
+For transforming this csv file into a tidy format, I first extracted the important meta-data (teams and date) as values and subsequently deleted the top 12 rows.
 
 ```{r meta-data cleaning}
 
@@ -80,7 +80,7 @@ kable(head_data_skip) %>%
     kable_classic_2()
 ```
 
-As the rows "Minute Splits" mark the points for each team, I identified the row numbers where this occured and then splitted the data frame in two, one for each team. 
+As the rows "Minute Splits" mark the points for each team, I identified the row numbers where this occurred and then split the data frame in two, one for each team. 
 
 ```{r split data frame}
 
@@ -99,7 +99,7 @@ As the rows "Minute Splits" mark the points for each team, I identified the row 
 
 ```
 
-Now that data from the two teams are in seperate date frames contained in a list, I can use the `map` function from the `purrr`package to apply functions across all list elements. This makes the coding less repetitive. 
+Now that data from the two teams are in separate date frames contained in a list, I can use the `map` function from the `purrr` package to apply functions across all list elements. This makes the coding less repetitive. 
 
 ```{r initial list manipulation, warning=FALSE, message=FALSE}
   
@@ -163,7 +163,7 @@ kableExtra::kable(list_team_combined[[2]]) %>%
 
 ```
 
-I now bind lists back into a single data frame, and clean up the table so that column names etc. makes sense.
+I now bind the lists back into a single data frame, and clean up the table so column names etc. make sense.
 
 ```{r}
 
@@ -182,7 +182,7 @@ I now bind lists back into a single data frame, and clean up the table so that c
   
 ```
 
-We now need to tidy up the column names (splits) and label first and second half.
+We now need to tidy up the column names (splits) and label the first and second half.
 
 ```{r colnames splits}
 
@@ -218,7 +218,7 @@ kableExtra::kable(df_data_combined_head) %>%
 
 ```
 
-The final step is now to turn the data frame into a long format and clean the last part, eg. first_5
+The final step is to turn the data frame into a long format and clean the last part, eg. first_5
 
 ```{r final step}
 
@@ -237,7 +237,7 @@ The final step is now to turn the data frame into a long format and clean the la
 
 ```  
   
-The final tidy data frame now look like this ready to be analysed in R (initial 20 rows showed): 
+The final tidy data frame look like this. It is now in a tidy long format ready to be analysed in R (initial 20 rows showed): 
 
 ```{r data frame final, echo = FALSE}
 
@@ -248,9 +248,9 @@ kableExtra::kable(df_data_long_head) %>%
 
 ```
 
-Last part was to wrap it all into a function and finally package. The above outline takes only one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy. 
+The last part was to wrap it all into a function and finally a package. The above outline only accept one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy. 
 
-I welcome any feedback/suggestions for improvements of the code, but for now it gets the job done. 
+I welcome any feedback/suggestions for improvements of the code.
 
 
 
