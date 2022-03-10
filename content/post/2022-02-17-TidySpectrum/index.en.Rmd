@@ -36,6 +36,7 @@ library(readr)
 library(kableExtra)
 library(tidyverse)
 library(janitor)
+library(ggeasy)
 
 data_sample <- read_csv("C:/Users/lasse/OneDrive/Skrivebord/SecondSpectrumSample.csv")
 
@@ -287,21 +288,22 @@ The last part was to wrap it all into a function and finally a package. The abov
 
 With the data now in a tidy long format, we can easily produce different visualizations of the data, for example a comparison of two athletes for high intensity running distance.
 
-```{r plot, fig.width=20, fig.height=6}
+```{r plot, fig.width=20, fig.height=8}
 
 df_data_long %>%
   group_by(half) %>%
   filter(team == "Team A", id %in% c("Athlete 3", "Athlete 1")) %>%
   filter(metric %in% c("High Speed Running Distance", "Sprinting Distance")) %>% 
-  ggplot2::ggplot(aes(x = splits, y = value, color = id)) +
-  geom_point(size = 3) +
-  geom_line(aes(group = id)) +
+  ggplot2::ggplot(aes(x = splits, y = value, fill = id)) +
+  geom_col(aes(group = id), position = "dodge", alpha = 0.3) +
+  geom_line(aes(group = id, color = id), size = 2) +
   facet_wrap(~metric, ncol = 1, scales = "free_y") + 
   theme_bw() +
   ylab("Meters") +
   xlab("Minutes Played") +
   ggtitle("High Intensity Running Across a Match") +
-  labs(color = "Athlete name")
+  labs(fill = "Athlete name") +
+  ggeasy::easy_all_text_size(20)
   
 
 ```

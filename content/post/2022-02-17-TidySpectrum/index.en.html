@@ -7819,14 +7819,15 @@ TeamA - TeamB
   group_by(half) %&gt;%
   filter(team == &quot;Team A&quot;, id %in% c(&quot;Athlete 3&quot;, &quot;Athlete 1&quot;)) %&gt;%
   filter(metric %in% c(&quot;High Speed Running Distance&quot;, &quot;Sprinting Distance&quot;)) %&gt;% 
-  ggplot2::ggplot(aes(x = splits, y = value, color = id)) +
-  geom_point(size = 3) +
-  geom_line(aes(group = id)) +
+  ggplot2::ggplot(aes(x = splits, y = value, fill = id)) +
+  geom_col(aes(group = id), position = &quot;dodge&quot;, alpha = 0.3) +
+  geom_line(aes(group = id, color = id), size = 2) +
   facet_wrap(~metric, ncol = 1, scales = &quot;free_y&quot;) + 
   theme_bw() +
   ylab(&quot;Meters&quot;) +
   xlab(&quot;Minutes Played&quot;) +
   ggtitle(&quot;High Intensity Running Across a Match&quot;) +
-  labs(color = &quot;Athlete name&quot;)</code></pre>
+  labs(fill = &quot;Athlete name&quot;) +
+  ggeasy::easy_all_text_size(20)</code></pre>
 <p><img src="{{< blogdown/postref >}}index.en_files/figure-html/plot-1.png" width="1920" />
 Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.</p>

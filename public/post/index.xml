@@ -7821,15 +7821,16 @@ TeamA - TeamB
   group_by(half) %&amp;gt;%
   filter(team == &amp;quot;Team A&amp;quot;, id %in% c(&amp;quot;Athlete 3&amp;quot;, &amp;quot;Athlete 1&amp;quot;)) %&amp;gt;%
   filter(metric %in% c(&amp;quot;High Speed Running Distance&amp;quot;, &amp;quot;Sprinting Distance&amp;quot;)) %&amp;gt;% 
-  ggplot2::ggplot(aes(x = splits, y = value, color = id)) +
-  geom_point(size = 3) +
-  geom_line(aes(group = id)) +
+  ggplot2::ggplot(aes(x = splits, y = value, fill = id)) +
+  geom_col(aes(group = id), position = &amp;quot;dodge&amp;quot;, alpha = 0.3) +
+  geom_line(aes(group = id, color = id), size = 2) +
   facet_wrap(~metric, ncol = 1, scales = &amp;quot;free_y&amp;quot;) + 
   theme_bw() +
   ylab(&amp;quot;Meters&amp;quot;) +
   xlab(&amp;quot;Minutes Played&amp;quot;) +
   ggtitle(&amp;quot;High Intensity Running Across a Match&amp;quot;) +
-  labs(color = &amp;quot;Athlete name&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+  labs(fill = &amp;quot;Athlete name&amp;quot;) +
+  ggeasy::easy_all_text_size(20)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/figure-html/plot-1.png&#34; width=&#34;1920&#34; /&gt;
 Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.&lt;/p&gt;
 </description>
