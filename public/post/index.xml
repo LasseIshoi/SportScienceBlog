@@ -3508,9 +3508,11 @@ NA
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#extract the value in the first column and row in a new data frame
  Match_data &amp;lt;- data_sample[1,1]
 
-#Since the Match_data now contains both Team and date in a single column, I separate the column into two columns 
+#Since the Match_data now contains both Team and date in a single column, 
+#I separate the column into two columns 
   Match_data &amp;lt;- Match_data %&amp;gt;%
-    separate(col = &amp;quot;Second Spectrum Split Data&amp;quot;, into = c(&amp;quot;match&amp;quot;, &amp;quot;date&amp;quot;), sep = &amp;quot; : &amp;quot;)
+    separate(col = &amp;quot;Second Spectrum Split Data&amp;quot;, into = c(&amp;quot;match&amp;quot;, &amp;quot;date&amp;quot;), 
+             sep = &amp;quot; : &amp;quot;)
 
 #and subsequently store each value
   match &amp;lt;- Match_data$match
@@ -4275,10 +4277,12 @@ NA
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;As the rows “Minute Splits” mark the points for each team, I identified the row numbers where this occurred and then split the data frame in two, one for each team.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Using the which function to identify row numbers for Minute Spilts, which mark the separation of the two teams
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Using the which function to identify row numbers for Minute Spilts, 
+#which mark the separation of the two teams
   splits &amp;lt;- which(data_skip$`Second Spectrum Split Data` == &amp;quot;Minute Splits&amp;quot;)
 
-#Using the row numbers to slice the data frame and two splits, one for each team
+#Using the row numbers to slice the data frame and two splits, 
+#one for each team
   data_split_1 &amp;lt;- data_skip %&amp;gt;%
     slice(splits[1]:(splits[2]-1))
 
@@ -4288,28 +4292,42 @@ NA
 #Combine in a list
   list_split_team &amp;lt;- list(data_split_1, data_split_2)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now that data from the two teams are in separate date frames contained in a list, I can use the &lt;code&gt;map&lt;/code&gt; function from the &lt;code&gt;purrr&lt;/code&gt; package to apply functions across all list elements. This makes the coding less repetitive.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#I first move the first row up to become column names, remove empty rows/columns, and clean column names since (this is important this there are two splits with 50) using the janitor package. change first row to col names, remove emply rows and/or columns, and create unique colnames, rename, and add row numbers for breaks
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#I first move the first row up to become column names, remove empty 
+#rows/columns, and clean column names (this is important since 
+#there are two splits with 50) using the janitor package.
   list_split_team &amp;lt;- list_split_team %&amp;gt;%
     map(function(x){row_to_names(x, 1)}) %&amp;gt;%
     map(function(x){remove_empty(x)}) %&amp;gt;%
     map(function(x){clean_names(x)}) %&amp;gt;%
-#I then rename the first column from minute split, which was the name of the row, to metric, which then contains the different running measures
+#I then rename the first column from minute split, 
+#which was the name of the row, to metric, which then contains 
+#the different running measures
     map(function(x){rename(x, metric = minute_splits)}) %&amp;gt;%
-#I create a new column with row number, which I need to cut a data frame in chunks containing a player each 
+#I create a new column with row number, which I need to cut a data frame
+#in chunks containing a player each 
     map(function(x){mutate(x, row_number = row_number())}) %&amp;gt;%
-#I create a new column with the value from the first column and row (that the the team name)
+#I create a new column with the value from the first column and row 
+#(that the the team name)
     map(function(x) {mutate(x, &amp;quot;team_sep&amp;quot; = x[[1,1]])}) %&amp;gt;%
-#For each team/player the running based metrics are contained in 12 rows, so I use the cut function to mark cuts every 12th rows
-    map(function(x){mutate(x, cuts = cut(x$row_number, breaks = (max(nrow(x))/12)))}) %&amp;gt;%
-#I also mark the initial 12 rows versus the remaining rows and label those &amp;quot;group&amp;quot; and &amp;quot;individual&amp;quot; to mark whether the metrics a based on a team or individual level
-    map(function(x){mutate(x, level = cut(x$row_number, breaks = c(0,12, max(nrow(x))), labels = c(&amp;quot;group&amp;quot;, &amp;quot;individual&amp;quot;)))})
+#For each team/player the running based metrics are contained in 12 rows, 
+#so I use the cut function to mark cuts every 12th rows
+    map(function(x){mutate(x, cuts = cut(x$row_number, 
+            breaks = (max(nrow(x))/12)))}) %&amp;gt;%
+#I also mark the initial 12 rows versus the remaining rows
+#and label those &amp;quot;group&amp;quot; and &amp;quot;individual&amp;quot; to mark whether
+#the metrics are based on a team or individual level
+    map(function(x){mutate(x, level = cut(x$row_number, 
+            breaks = c(0,12, max(nrow(x))), 
+            labels = c(&amp;quot;group&amp;quot;, &amp;quot;individual&amp;quot;)))})
 
 #I then create a data from each team
   data_split_1 &amp;lt;- list_split_team[[1]]
   data_split_2 &amp;lt;- list_split_team[[2]]
 
 
-#split each data frame based on the cuts for each player, so I end up with two lists - one for each team each containing separate data frames for each player
+#split each data frame based on the cuts for each player, 
+#so I end up with two lists - one for each team each containing
+#separate data frames for each player
   list_team_1 &amp;lt;- data_split_1 %&amp;gt;%
     group_split(cuts)
   list_team_2 &amp;lt;- data_split_2 %&amp;gt;%
@@ -5326,7 +5344,8 @@ individual
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;The next step is to separate the athlete name from the metric column and then clean all the NA values of the first row.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#mutate a new variable &amp;quot;id&amp;quot; based on first row/column (identifier name) in each data frame 
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#mutate a new variable &amp;quot;id&amp;quot; based on first row/column (identifier name)
+#in each data frame 
   list_team_combined &amp;lt;- list_team_combined  %&amp;gt;%
     map(function(x) {mutate(x, &amp;quot;id&amp;quot; = x[[1,1]])}) %&amp;gt;%
 #and omit all na to clean data frames
@@ -6303,16 +6322,22 @@ Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
   df_data_combined &amp;lt;- list_team_combined %&amp;gt;%
     bind_rows()
 
-#separate team/player name from identifier (the numbers/characters contained in brackets after each player/team name)
+#separate team/player name from identifier (the numbers/characters 
+#contained in brackets after each player/team name)
   df_data_combined  &amp;lt;- df_data_combined  %&amp;gt;%
     separate(col = id, into = c(&amp;quot;id&amp;quot;, NA), sep = &amp;quot; [(]&amp;quot;) %&amp;gt;%
     separate(col = team_sep, into = c(&amp;quot;team&amp;quot;, NA), sep = &amp;quot; [(]&amp;quot;)
   
-#delete unnecessary columns, columns that are no longer needed (row_number and cuts)
+#delete unnecessary columns, columns that are no longer needed
+#(row_number and cuts)
   df_data_combined &amp;lt;- df_data_combined %&amp;gt;%
     select(-c(&amp;quot;row_number&amp;quot;, &amp;quot;cuts&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We now need to tidy up the column names (splits) and label the first and second half.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#First select the the first half data set. This can be achieved by selecting the columns from the &amp;quot;metric&amp;quot; to the &amp;quot;x50_2&amp;quot; subsequently deleting the &amp;quot;x50_2&amp;quot; column as this belongs to the second half. We need to do it this way, since the last column of the first half also contains &amp;quot;x50&amp;quot;.
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#First select the the first half data set. This can be achieved
+#by selecting the columns from the &amp;quot;metric&amp;quot; to the &amp;quot;x50_2&amp;quot; and 
+#subsequently deleting the &amp;quot;x50_2&amp;quot; column as this belongs to the second half. 
+#We need to do it this way, since the last column of the first half
+#also contains &amp;quot;x50&amp;quot;.
   df_data_combined_first &amp;lt;- df_data_combined %&amp;gt;%
     select(metric:ends_with(&amp;quot;2&amp;quot;)) %&amp;gt;%
     select(-(ends_with(&amp;quot;2&amp;quot;)))
@@ -6321,15 +6346,22 @@ Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
   df_data_combined_second &amp;lt;- df_data_combined %&amp;gt;%
     select(ends_with(&amp;quot;2&amp;quot;):id)
 
-#In each of the two data frames we now change &amp;quot;x&amp;quot; to &amp;quot;first_&amp;quot; or &amp;quot;second_&amp;quot;, respectively, to label the period in the game. This is not necessary, but give some nice oppurtunity to finter on half once we turn the data into a tidy format
-  names(df_data_combined_first) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;first_&amp;quot;, names(df_data_combined_first))
+#In each of the two data frames we now change &amp;quot;x&amp;quot; to &amp;quot;first_&amp;quot; or &amp;quot;second_&amp;quot;,
+#respectively, to label the period in the game. This is not necessary, 
+#but give some nice oppurtunity to finter on half once
+#we turn the data into a tidy format
+  names(df_data_combined_first) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;first_&amp;quot;, 
+                      names(df_data_combined_first))
 
 #change x to second
-  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;_2&amp;quot;, &amp;quot;&amp;quot;, names(df_data_combined_second))
-  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;second_&amp;quot;, names(df_data_combined_second))
+  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;_2&amp;quot;, &amp;quot;&amp;quot;, 
+                      names(df_data_combined_second))
+  names(df_data_combined_second) &amp;lt;- gsub(&amp;quot;x&amp;quot;, &amp;quot;second_&amp;quot;, 
+                      names(df_data_combined_second))
 
 #bind columns from the two data frames back to single dataframe
-  df_data_combined &amp;lt;- bind_cols(df_data_combined_first, df_data_combined_second)&lt;/code&gt;&lt;/pre&gt;
+  df_data_combined &amp;lt;- bind_cols(df_data_combined_first, 
+                                df_data_combined_second)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The data frame now looks like this:&lt;/p&gt;
 &lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
 &lt;thead&gt;
@@ -7152,11 +7184,14 @@ Team A
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;The final step is to turn the data frame into a long format and clean the last part, eg. first_5&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#use the pivot longer to change from wide to long format based on all numeric columns (all columns containing split values)
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#use the pivot longer to change from wide to long format based on all
+#numeric columns (all columns containing split values)
   df_data_long &amp;lt;- df_data_combined %&amp;gt;%
-    pivot_longer(cols = where(is.numeric), names_to = &amp;quot;split&amp;quot;, values_to = &amp;quot;value&amp;quot;)
+    pivot_longer(cols = where(is.numeric), names_to = &amp;quot;split&amp;quot;, 
+                 values_to = &amp;quot;value&amp;quot;)
 
-#separate the row names with split labels (eg. first_5) into two columns with &amp;quot;half&amp;quot; (first and second, respectively) and &amp;quot;splits&amp;quot; (eg. 5, 10, 10 etc.)
+#separate the row names with split labels (eg. first_5) into two columns
+#with &amp;quot;half&amp;quot; (first and second, respectively) and &amp;quot;splits&amp;quot; (eg. 5, 10, 10 etc.)
   df_data_long &amp;lt;- df_data_long %&amp;gt;%
     separate(col = split, into = c(&amp;quot;half&amp;quot;, &amp;quot;splits&amp;quot;), sep = &amp;quot;_&amp;quot;) %&amp;gt;%
     mutate(match = match,
