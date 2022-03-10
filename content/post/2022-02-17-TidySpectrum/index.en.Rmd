@@ -4,11 +4,11 @@ author: 'Lasse Ishøi'
 date: '2022-03-08'
 categories: []
 tags: []
-subtitle: 'A walkthrough of the TidySpectrum R Package'
-summary: 'From messy csv files to tidy R format'
+subtitle: "A walkthrough of the TidySpectrum R Package"
+summary: "From messy csv files to tidy R format"
 authors: []
 lastmod: '2022-03-08T13:18:49+01:00'
-featured: no
+featured: yes
 image: 
   caption: ''
   focal_point: ''
@@ -173,8 +173,8 @@ I now bind the lists back into a single data frame, and clean up the table so co
 
 #separate team/player name from identifier (the numbers/characters contained in brackets after each player/team name)
   df_data_combined  <- df_data_combined  %>%
-    separate(col = id, into = c("id", NA), sep = "[(]") %>%
-    separate(col = team_sep, into = c("team", NA), sep = "[(]")
+    separate(col = id, into = c("id", NA), sep = " [(]") %>%
+    separate(col = team_sep, into = c("team", NA), sep = " [(]")
   
 #delete unnecessary columns, columns that are no longer needed (row_number and cuts)
   df_data_combined <- df_data_combined %>%
@@ -237,7 +237,7 @@ The final step is to turn the data frame into a long format and clean the last p
 
 ```  
   
-The final tidy data frame look like this. It is now in a tidy long format ready to be analysed in R (initial 20 rows showed): 
+The final tidy data frame looks like this. It is now in a tidy long format ready to be analysed in R (initial 20 rows showed): 
 
 ```{r data frame final, echo = FALSE}
 
@@ -248,9 +248,29 @@ kableExtra::kable(df_data_long_head) %>%
 
 ```
 
-The last part was to wrap it all into a function and finally a package. The above outline only accept one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy. 
+The last part was to wrap it all into a function and finally a package. The above outline only accept one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy.  
 
-I welcome any feedback/suggestions for improvements of the code.
+With the data now in a tidy long format, we can easily produce different visualizations of the data, for example a comparison of two athletes for high intensity running distance.
+
+```{r plot, fig.width=20, fig.height=6}
+
+df_data_long %>%
+  group_by(half) %>%
+  filter(team == "Team A", id %in% c("Athlete 3", "Athlete 1")) %>%
+  filter(metric %in% c("High Speed Running Distance", "Sprinting Distance")) %>% 
+  ggplot2::ggplot(aes(x = splits, y = value, color = id)) +
+  geom_point(size = 3) +
+  geom_line(aes(group = id)) +
+  facet_wrap(~metric, ncol = 1, scales = "free_y") + 
+  theme_bw() +
+  ylab("Meters") +
+  xlab("Minutes Played") +
+  ggtitle("High Intensity Running Across a Match") +
+  labs(color = "Athlete name")
+  
+
+```
+Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.
 
 
 

@@ -6420,8 +6420,8 @@ Athlete 1 (9ca4a299-6133-4cb3-aded-8ee19cfe8ced)
 
 #separate team/player name from identifier (the numbers/characters contained in brackets after each player/team name)
   df_data_combined  &amp;lt;- df_data_combined  %&amp;gt;%
-    separate(col = id, into = c(&amp;quot;id&amp;quot;, NA), sep = &amp;quot;[(]&amp;quot;) %&amp;gt;%
-    separate(col = team_sep, into = c(&amp;quot;team&amp;quot;, NA), sep = &amp;quot;[(]&amp;quot;)
+    separate(col = id, into = c(&amp;quot;id&amp;quot;, NA), sep = &amp;quot; [(]&amp;quot;) %&amp;gt;%
+    separate(col = team_sep, into = c(&amp;quot;team&amp;quot;, NA), sep = &amp;quot; [(]&amp;quot;)
   
 #delete unnecessary columns, columns that are no longer needed (row_number and cuts)
   df_data_combined &amp;lt;- df_data_combined %&amp;gt;%
@@ -7279,7 +7279,7 @@ Team A
   
 #change the data column from character string to date format
   df_data_long$date &amp;lt;- as.Date(df_data_long$date)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The final tidy data frame look like this. It is now in a tidy long format ready to be analysed in R (initial 20 rows showed):&lt;/p&gt;
+&lt;p&gt;The final tidy data frame looks like this. It is now in a tidy long format ready to be analysed in R (initial 20 rows showed):&lt;/p&gt;
 &lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -7896,7 +7896,22 @@ TeamA - TeamB
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;The last part was to wrap it all into a function and finally a package. The above outline only accept one csv file, but in the package there is a function that also analyses a list of csv data frames, which makes it easy to perform multiple match analyses fast and easy.&lt;/p&gt;
-&lt;p&gt;I welcome any feedback/suggestions for improvements of the code.&lt;/p&gt;
+&lt;p&gt;With the data now in a tidy long format, we can easily produce different visualizations of the data, for example a comparison of two athletes for high intensity running distance.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df_data_long %&amp;gt;%
+  group_by(half) %&amp;gt;%
+  filter(team == &amp;quot;Team A&amp;quot;, id %in% c(&amp;quot;Athlete 3&amp;quot;, &amp;quot;Athlete 1&amp;quot;)) %&amp;gt;%
+  filter(metric %in% c(&amp;quot;High Speed Running Distance&amp;quot;, &amp;quot;Sprinting Distance&amp;quot;)) %&amp;gt;% 
+  ggplot2::ggplot(aes(x = splits, y = value, color = id)) +
+  geom_point(size = 3) +
+  geom_line(aes(group = id)) +
+  facet_wrap(~metric, ncol = 1, scales = &amp;quot;free_y&amp;quot;) + 
+  theme_bw() +
+  ylab(&amp;quot;Meters&amp;quot;) +
+  xlab(&amp;quot;Minutes Played&amp;quot;) +
+  ggtitle(&amp;quot;High Intensity Running Across a Match&amp;quot;) +
+  labs(color = &amp;quot;Athlete name&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/figure-html/plot-1.png&#34; width=&#34;1920&#34; /&gt;
+Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.&lt;/p&gt;
 </description>
     </item>
     
