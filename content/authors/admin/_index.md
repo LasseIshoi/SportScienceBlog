@@ -7,7 +7,7 @@ education:
     year: 2022 - 
   - course: PhD (Femoroacetabular impingement Syndrome)
     institution: University of Copenhagen, Denmark
-    year: 2019 - 
+    year: 2019 - 2022
   - course: MSc Sport Science
     institution: University of Southern Denmark, Denmark
     year: 2017
@@ -28,7 +28,7 @@ interests:
 organizations:
 - name:
   url: 
-role: Head of Sport Science at Football Club Nordsjælland (a Danish first tier club), and post doc. at Hvidovre Hospital
+role: Head of Sport Science at Football Club Nordsjælland (a Danish first tier club), and postdoc at Sports Orthopedic Research Center - Copenhagen (SORC-C)
 social:
 - icon: envelope
   icon_pack: fas
@@ -52,8 +52,10 @@ superuser: true
 title: Lasse Ishøi
 ---
 
-I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries, and data analytics. I am currently studying for a PhD at the [Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx) at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.
+I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries, and data analytics. I am currently a postdoctoral researcher at the [Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx) at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.  
+
+I completed my PhD in 2022 which was conducted at SORC-C and was entitled "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return t Sport, and Hip Muscle Strength After Hip Arthroscopy".  
+
+{{< icon name="download" pack="fas" >}} My PhD thesis can be downloaded {{< staticref "uploads/PhDThesisLasseIshoi.pdf" "newtab" >}}here{{< /staticref >}}
 
 I also serve as the Head of Sport Science in [Football Club Nordsjælland](https://www.fcn.dk), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to [Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
-
-{{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/resume.pdf" "newtab" >}}resumé{{< /staticref >}}.

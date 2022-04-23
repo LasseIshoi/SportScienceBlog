@@ -17,6 +17,6 @@ advanced:
 ---
 
 ## by Lasse Ishøi,
-#### Physiotherapist, Sport Scientist, PhD candidate
+#### Physiotherapist, Sport Scientist, PhD
 
-#### You will find my resume, various sport science-related blog posts, and my R packages which I mainly develop for my own daily practice as Head of Sport Science in F.C. Nordsjælland
+#### Here you will find my resume, various sport science-related blog posts, and my R packages which I mainly develop for my own daily practice as Head of Sport Science in F.C. Nordsjælland

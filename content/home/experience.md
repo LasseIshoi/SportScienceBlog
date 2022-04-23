@@ -22,6 +22,20 @@ date_format: Jan 2006
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
+  - title: Postdoctoral Researcher
+    company: Sports Orthepedic Research Center - Copenhagen (SORC-C), Hvidovre Hospital
+    company_url: 'https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx'
+    company_logo: SORC-C
+    location: Copenhagen
+    date_start: '2022-04-21'
+    date_end: ''
+    description: |2-
+        Responsibilities include:
+        
+        * Research related to longstanding hip and groin pain
+        * Supervision of MSc and PhD students
+
+
   - title: Head of Sport Science
     company: Football Club Nordsjælland
     company_url: 'https://fcn.dk/'
@@ -55,8 +69,8 @@ experience:
     company_url: 'https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx'
     company_logo: SORC-C
     location: Copenhagen
-    date_start: '2018-01-01'
-    date_end: '2021-01-01'
+    date_start: '2019-01-15'
+    date_end: '2022-01-14'
     description: "Research related to hip-related pain (femoroacetabular impingement syndrome) and outcome after hip arthroscopy.       
     **PhD Thesis:** Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return to Sport, and Hip MUscle Strength after Hip Arthroscopy."
 
