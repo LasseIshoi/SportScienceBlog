@@ -58,4 +58,4 @@ I completed my PhD in 2022 which was conducted at SORC-C and was entitled "Femor
 
 {{< icon name="download" pack="fas" >}} My PhD thesis can be downloaded {{< staticref "uploads/PhDThesisLasseIshoi.pdf" "newtab" >}}here{{< /staticref >}}
 
-I also serve as the Head of Sport Science in [Football Club Nordsjælland](https://www.fcn.dk), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to [Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
+I also serve as the Head of Sport Science in [Football Club Nordsjælland](https://www.fcn.dk), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to [Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/)), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
