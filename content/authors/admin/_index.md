@@ -54,8 +54,6 @@ title: Lasse Ishøi
 
 I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries, and data analytics. I am currently a postdoctoral researcher at the [Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx) at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.  
 
-I completed my PhD in 2022 which was conducted at SORC-C and was entitled "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return t Sport, and Hip Muscle Strength After Hip Arthroscopy".  
+I completed my PhD in 2022 which was conducted at SORC-C and was entitled "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return t Sport, and Hip Muscle Strength After Hip Arthroscopy".
 
-{{< icon name="download" pack="fas" >}} My PhD thesis can be downloaded {{< staticref "uploads/PhDThesisLasseIshoi.pdf" "newtab" >}}here{{< /staticref >}}
-
-I also serve as the Head of Sport Science in [Football Club Nordsjælland](https://www.fcn.dk), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to [Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/)), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
+I serve as the Head of Sport Science in [Football Club Nordsjælland](https://www.fcn.dk), a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to [Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/)), where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.

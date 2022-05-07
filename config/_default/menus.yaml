@@ -13,6 +13,9 @@ main:
   - name: My R Packages
     url: '#projects'
     weight: 30
+  - name: PhD Thesis
+    url: '#talks'
+    weight: 40
   - name: Peer-Review Publications
     url: '#publications'
     weight: 50

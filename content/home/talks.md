@@ -6,13 +6,13 @@ widget: pages
 # This file represents a page section.
 headless: true
 
-active: false
+active: true
 
 # Order that this section appears on the page.
 weight: 70
 
-title: 'Recent & Upcoming Talks'
-subtitle:
+title: 'PhD Thesis'
+subtitle: "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return to Sport, and Hip Muscle Strength after Hip Arthroscopy"
 
 content:
   # Page type to display. E.g. post, event, publication...
@@ -39,5 +39,9 @@ design:
   #   2 = Compact
   #   3 = Card
   #   4 = Citation (publication only)
-  view: 2
+  view: 3
+  background:
+    color: '#0B103C'
+    # Text color (true=light, false=dark, or remove for the dynamic theme color). 
+    text_color_light: true
 ---
