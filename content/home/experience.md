@@ -22,7 +22,7 @@ date_format: Jan 2006
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
-  - title: Head of Sport Science
+  - title: Head of Sport and Data Science
     company: Football Club Nordsjælland
     company_url: 'https://fcn.dk/'
     company_logo: FCN_logo

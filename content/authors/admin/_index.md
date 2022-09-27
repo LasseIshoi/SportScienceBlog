@@ -17,7 +17,7 @@ education:
   - course: BSc in Physiotherapy
     institution: Copenhagen Metropolitan College, Denmark
     year: 2015
-email: "li@fcn.dk"
+email: "mailto:li@fcn.dk"
 highlight_name: true
 interests:
 - Muscle Injuries
@@ -28,11 +28,11 @@ interests:
 organizations:
 - name:
   url: 
-role: Head of Sport Science at Football Club Nordsjælland (a Danish first tier club), and postdoc at Sports Orthopedic Research Center - Copenhagen (SORC-C)
+role: Head of Sport and Data Science at Football Club Nordsjælland (a Danish first tier club), and postdoc at Sports Orthopedic Research Center - Copenhagen (SORC-C)
 social:
 - icon: envelope
   icon_pack: fas
-  link: li@fcn.dk
+  link: "mailto:li@fcn.dk"
 - display:
     header: true
   icon: twitter
@@ -54,7 +54,7 @@ title: Lasse Ishøi
 
 I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries, and data analytics.  
 
-I serve as the Head of Sport Science in **[Football Club Nordsjælland](https://www.fcn.dk)**, a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to **[Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/))**, where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
+I serve as the Head of Sport and Data Science in **[Football Club Nordsjælland](https://www.fcn.dk)**, a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to **[Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/))**, where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
 
 I am also a postdoctoral researcher at the **[Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx)** at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.  
 

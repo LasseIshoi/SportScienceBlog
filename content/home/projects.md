@@ -46,5 +46,4 @@ design:
     text_color_light: false
 ---
 
-A collection of my R packages. These are light weight packages mainly developed for my own daily practice.  
-Feel free to hit the link and download a package. 
+A collection of my R packages. These are light weight packages mainly developed for my own daily practice.

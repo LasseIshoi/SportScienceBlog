@@ -2,7 +2,7 @@
 widget: hero
 headless: true
 weight: 10
-title: Welcome to my Sport Science Blog
+title: Welcome to my Personal Sport Science site
 hero_media:
 design:
   background:
@@ -19,4 +19,4 @@ advanced:
 ## by Lasse Ishøi,
 #### Physiotherapist, Sport Scientist, PhD
 
-#### Here you will find my resume, various sport science-related blog posts, and my R packages which I mainly develop for my own daily practice as Head of Sport Science in F.C. Nordsjælland
+#### Here you will find my resume, various sport science-related blog posts, and my R packages which I mainly develop to ease my daily work as Head of Sport and Data Science at F.C. Nordsjælland
