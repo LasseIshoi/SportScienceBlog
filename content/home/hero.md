@@ -2,7 +2,7 @@
 widget: hero
 headless: true
 weight: 10
-title: Welcome to my Personal Sport Science site
+title: Welcome to my personal site
 hero_media:
 design:
   background:

@@ -35,6 +35,8 @@ experience:
         * Leading the Sport Science Group
         * Data collection
         * Data analyses
+        * R Studio / Shiny
+        * SQL Server
   
   
   - title: Postdoctoral Researcher
