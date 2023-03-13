@@ -5,7 +5,7 @@
     <link>https://lasseishoi.netlify.app/post/</link>
       <atom:link href="https://lasseishoi.netlify.app/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 08 Mar 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
@@ -15,7 +15,7 @@
     <item>
       <title>How to tidy Second Spectrum Physical Splits csv files</title>
       <link>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</link>
-      <pubDate>Tue, 08 Mar 2022 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
       <guid>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</guid>
       <description>
 &lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
@@ -24,10 +24,9 @@
 
 
 &lt;p&gt;Working as a sport scientist requires handling of data from many different external sources. One of these may be from the &lt;strong&gt;&lt;a href=&#34;https://www.secondspectrum.com/index.html&#34;&gt;Second Spectrum&lt;/a&gt;&lt;/strong&gt;, a match video tracking and analytics provider for many major leagues, including the Danish Superliga.&lt;/p&gt;
-&lt;p&gt;While Second Spectrum provides a basic overview of physical match data across teams and players in the league via their cloud solution, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses in R, why a saw the need to develop a small R package for transforming the exported csv files into a tidy format to make my life easier.&lt;/p&gt;
-&lt;p&gt;In this blog post I provide a walkthrough of the data cleaning and manipulation process of the &lt;strong&gt;&lt;a href=&#34;https://lasseishoi.github.io/TidySpectrum/&#34;&gt;TidySpectrum package&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;In relation to this, a big shout out to the &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ&#34;&gt;TidyX Screencast&lt;/a&gt;&lt;/strong&gt; by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=R8LK1SNH9p0&amp;amp;list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&amp;amp;index=4&#34;&gt;clean ugly excel files&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;I am certain that the data cleaning and manipulation process/code can be done way more elegantly than what I ended up with, but it does the job which for me is the most important success criteria.&lt;/p&gt;
+&lt;p&gt;While Second Spectrum provides a basic overview of physical match data across teams and players in the league via their cloud solution, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses, why I saw the need to develop a small R package for transforming the exported csv files into a tidy format to make my life easier.&lt;/p&gt;
+&lt;p&gt;In this blog post I provide a walk through of the data cleaning and manipulation process of the &lt;strong&gt;&lt;a href=&#34;https://lasseishoi.github.io/TidySpectrum/&#34;&gt;TidySpectrum package&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;A big shout out to the &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ&#34;&gt;TidyX Screencast&lt;/a&gt;&lt;/strong&gt; by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=R8LK1SNH9p0&amp;amp;list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&amp;amp;index=4&#34;&gt;clean ugly excel files&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Second Spectrum gives access to different physical data files, of which I am most interested in the Physical Splits, which essentially provides 5 minute splits of different running metrics for all players at both teams, including aggregated for each team.&lt;/p&gt;
 &lt;p&gt;Let us first have a look at the top 50 rows of the csv file as it appear if you import it into R using the &lt;code&gt;read_csv&lt;/code&gt; function. In the first few rows you have some meta-data with information on the date and which two teams played each other, followed by some velocity threshold definitions. A few rows later there is an embedded header representing the minute splits followed by TeamA (including metrics) and all players for that particular team (including metrics for each player), and so fourth for TeamB. It is obvious that this is not a data structure/format suited for analyses.&lt;/p&gt;
 &lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
@@ -104,7 +103,7 @@ Second Spectrum Split Data
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-TeamA - TeamB : 2022-2-25
+TeamA - TeamB : 2022-2-21
 &lt;/td&gt;
 &lt;td style=&#34;text-align:right;&#34;&gt;
 NA
@@ -7259,7 +7258,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7288,7 +7287,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7317,7 +7316,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7346,7 +7345,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7375,7 +7374,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7404,7 +7403,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7433,7 +7432,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7462,7 +7461,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7491,7 +7490,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7520,7 +7519,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7549,7 +7548,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7578,7 +7577,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7607,7 +7606,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7636,7 +7635,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7665,7 +7664,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7694,7 +7693,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7723,7 +7722,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7752,7 +7751,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7781,7 +7780,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7810,7 +7809,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -7831,8 +7830,10 @@ TeamA - TeamB
   ggtitle(&amp;quot;High Intensity Running Across a Match&amp;quot;) +
   labs(fill = &amp;quot;Athlete name&amp;quot;) +
   ggeasy::easy_all_text_size(20)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/figure-html/plot-1.png&#34; width=&#34;1920&#34; /&gt;
-Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.&lt;/p&gt;
+Thanks for reading. Hopefully you found it useful/interesting.&lt;/p&gt;
 </description>
     </item>
     

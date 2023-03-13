@@ -5,7 +5,7 @@
     <link>https://lasseishoi.netlify.app/</link>
       <atom:link href="https://lasseishoi.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <description>LISportScience</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Mon, 09 May 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>LISportScience</title>
@@ -108,32 +108,9 @@ The variance of the distribution is $\sigma^{2}$.
     </item>
     
     <item>
-      <title>Rapid Spike in Hip Adduction Strength in Early Adolescent Footballers: A Study of 125 Elite Male Players From Youth to Senior</title>
-      <link>https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/</link>
-      <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/</guid>
-      <description>
-&lt;script src=&#34;https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;div id=&#34;abstract&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Abstract&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;Purpose&lt;/strong&gt;&lt;br /&gt;
-To investigate the differences in hip adductor and abductor muscle strength in elite male footballers from youth to senior level.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Methods&lt;/strong&gt;&lt;br /&gt;
-We tested 125 players from the under-13-years (U13) to senior squads of a Danish male professional football club in this cross-sectional design study. Hip adductor and abductor force (in newtons), torque (in newton meters), normalized torque (in newton meters per body mass), and adduction-to-abduction ratio were measured using handheld dynamometry.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Results&lt;/strong&gt;&lt;br /&gt;
-Between U’13 and senior level, adductor force increased by 104%, torque by 127%, and normalized torque by 21%. Abductor force increased by 78%, torque by 126%, and normalized torque by 17%. For incremental differences between age groups, significant increases were observed between the ages of U’13 to U’14 (18%–39%) and U’14 to U’15 (19%–33%) for all strength measures (P≤.021). No incremental difference was observed for adductor-to-abductor ratio.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;br /&gt;
-The large increases in hip adductor and abductor strength occurring between the ages of U’13 and U’15 offer insight into the strength capabilities and stress demands in these players, which may relate to injury vulnerability, and facilitate clinicians in selecting best-suited exercise interventions.&lt;/p&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
       <title>How to tidy Second Spectrum Physical Splits csv files</title>
       <link>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</link>
-      <pubDate>Tue, 08 Mar 2022 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
       <guid>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</guid>
       <description>
 &lt;script src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
@@ -142,10 +119,9 @@ The large increases in hip adductor and abductor strength occurring between the 
 
 
 &lt;p&gt;Working as a sport scientist requires handling of data from many different external sources. One of these may be from the &lt;strong&gt;&lt;a href=&#34;https://www.secondspectrum.com/index.html&#34;&gt;Second Spectrum&lt;/a&gt;&lt;/strong&gt;, a match video tracking and analytics provider for many major leagues, including the Danish Superliga.&lt;/p&gt;
-&lt;p&gt;While Second Spectrum provides a basic overview of physical match data across teams and players in the league via their cloud solution, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses in R, why a saw the need to develop a small R package for transforming the exported csv files into a tidy format to make my life easier.&lt;/p&gt;
-&lt;p&gt;In this blog post I provide a walkthrough of the data cleaning and manipulation process of the &lt;strong&gt;&lt;a href=&#34;https://lasseishoi.github.io/TidySpectrum/&#34;&gt;TidySpectrum package&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;In relation to this, a big shout out to the &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ&#34;&gt;TidyX Screencast&lt;/a&gt;&lt;/strong&gt; by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=R8LK1SNH9p0&amp;amp;list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&amp;amp;index=4&#34;&gt;clean ugly excel files&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;I am certain that the data cleaning and manipulation process/code can be done way more elegantly than what I ended up with, but it does the job which for me is the most important success criteria.&lt;/p&gt;
+&lt;p&gt;While Second Spectrum provides a basic overview of physical match data across teams and players in the league via their cloud solution, more comprehensive analyses and visualizations require export of the data. Unfortunately, this does not come in a tidy format suitable for analyses, why I saw the need to develop a small R package for transforming the exported csv files into a tidy format to make my life easier.&lt;/p&gt;
+&lt;p&gt;In this blog post I provide a walk through of the data cleaning and manipulation process of the &lt;strong&gt;&lt;a href=&#34;https://lasseishoi.github.io/TidySpectrum/&#34;&gt;TidySpectrum package&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;A big shout out to the &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/channel/UCP8l94xtoemCH_GxByvTuFQ&#34;&gt;TidyX Screencast&lt;/a&gt;&lt;/strong&gt; by Patrick Ward and Ellis Hughes, who have recorded two excellent videos on how to &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=R8LK1SNH9p0&amp;amp;list=PLdb0LTjA9iQyWeiYBhUHYFve349gTFF9s&amp;amp;index=4&#34;&gt;clean ugly excel files&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Second Spectrum gives access to different physical data files, of which I am most interested in the Physical Splits, which essentially provides 5 minute splits of different running metrics for all players at both teams, including aggregated for each team.&lt;/p&gt;
 &lt;p&gt;Let us first have a look at the top 50 rows of the csv file as it appear if you import it into R using the &lt;code&gt;read_csv&lt;/code&gt; function. In the first few rows you have some meta-data with information on the date and which two teams played each other, followed by some velocity threshold definitions. A few rows later there is an embedded header representing the minute splits followed by TeamA (including metrics) and all players for that particular team (including metrics for each player), and so fourth for TeamB. It is obvious that this is not a data structure/format suited for analyses.&lt;/p&gt;
 &lt;table class=&#34; lightable-classic-2&#34; style=&#34;font-family: &amp;quot;Arial Narrow&amp;quot;, &amp;quot;Source Sans Pro&amp;quot;, sans-serif; margin-left: auto; margin-right: auto;&#34;&gt;
@@ -222,7 +198,7 @@ Second Spectrum Split Data
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-TeamA - TeamB : 2022-2-25
+TeamA - TeamB : 2022-2-21
 &lt;/td&gt;
 &lt;td style=&#34;text-align:right;&#34;&gt;
 NA
@@ -7377,7 +7353,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7406,7 +7382,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7435,7 +7411,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7464,7 +7440,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7493,7 +7469,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7522,7 +7498,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7551,7 +7527,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7580,7 +7556,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7609,7 +7585,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7638,7 +7614,7 @@ first
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7667,7 +7643,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7696,7 +7672,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7725,7 +7701,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7754,7 +7730,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7783,7 +7759,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7812,7 +7788,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7841,7 +7817,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7870,7 +7846,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7899,7 +7875,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
@@ -7928,7 +7904,7 @@ second
 TeamA - TeamB
 &lt;/td&gt;
 &lt;td style=&#34;text-align:left;&#34;&gt;
-2022-02-25
+2022-02-21
 &lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -7949,8 +7925,33 @@ TeamA - TeamB
   ggtitle(&amp;quot;High Intensity Running Across a Match&amp;quot;) +
   labs(fill = &amp;quot;Athlete name&amp;quot;) +
   ggeasy::easy_all_text_size(20)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/figure-html/plot-1.png&#34; width=&#34;1920&#34; /&gt;
-Thanks for reading. Any feedback on the code or suggestions for improvements are welcome.&lt;/p&gt;
+Thanks for reading. Hopefully you found it useful/interesting.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Rapid Spike in Hip Adduction Strength in Early Adolescent Footballers: A Study of 125 Elite Male Players From Youth to Senior</title>
+      <link>https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/</link>
+      <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/</guid>
+      <description>
+&lt;script src=&#34;https://lasseishoi.netlify.app/publication/2022-06-01-groin-strength-from-youth-to-senior-football-players/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;abstract&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Purpose&lt;/strong&gt;&lt;br /&gt;
+To investigate the differences in hip adductor and abductor muscle strength in elite male footballers from youth to senior level.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Methods&lt;/strong&gt;&lt;br /&gt;
+We tested 125 players from the under-13-years (U13) to senior squads of a Danish male professional football club in this cross-sectional design study. Hip adductor and abductor force (in newtons), torque (in newton meters), normalized torque (in newton meters per body mass), and adduction-to-abduction ratio were measured using handheld dynamometry.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Results&lt;/strong&gt;&lt;br /&gt;
+Between U’13 and senior level, adductor force increased by 104%, torque by 127%, and normalized torque by 21%. Abductor force increased by 78%, torque by 126%, and normalized torque by 17%. For incremental differences between age groups, significant increases were observed between the ages of U’13 to U’14 (18%–39%) and U’14 to U’15 (19%–33%) for all strength measures (P≤.021). No incremental difference was observed for adductor-to-abductor ratio.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;br /&gt;
+The large increases in hip adductor and abductor strength occurring between the ages of U’13 and U’15 offer insight into the strength capabilities and stress demands in these players, which may relate to injury vulnerability, and facilitate clinicians in selecting best-suited exercise interventions.&lt;/p&gt;
+&lt;/div&gt;
 </description>
     </item>
     
