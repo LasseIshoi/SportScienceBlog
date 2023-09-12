@@ -1,9 +1,9 @@
 ##Add publication##
 
-Paper_Name <- ""
+Paper_Name <- "Hip arthroscopy prediction"
 
 
-blogdown::new_post(title = Paper_Name, author = "Lasse Ishøi", subdir = "publication", ext = ".Rmd")
+blogdown::new_post(title = Paper_Name,  author = "Lasse Ishøi", subdir = "publication", ext = ".Rmd")
 
 #Add in .MD file
 # 
