@@ -5,7 +5,7 @@
     <link>https://lasseishoi.netlify.app/</link>
       <atom:link href="https://lasseishoi.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <description>LISportScience</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 12 Sep 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>LISportScience</title>
@@ -105,6 +105,17 @@ The variance of the distribution is $\sigma^{2}$.
   &lt;summary&gt;What is the parameter $\mu$?&lt;/summary&gt;
   &lt;p&gt;The parameter $\mu$ is the mean or expectation of the distribution.&lt;/p&gt;
 &lt;/details&gt;</description>
+    </item>
+    
+    <item>
+      <title>trial</title>
+      <link>https://lasseishoi.netlify.app/publication/trial/</link>
+      <pubDate>Tue, 12 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/trial/</guid>
+      <description>
+
+
+</description>
     </item>
     
     <item>
@@ -8121,6 +8132,17 @@ In total, 46% of individuals having hip arthroscopy for FAIS achieved PASS at 12
       <guid>https://lasseishoi.netlify.app/publication/2022-02-18-copenhagen-adduction-editorial/</guid>
       <description>
 &lt;script src=&#34;https://lasseishoi.netlify.app/publication/2022-02-18-copenhagen-adduction-editorial/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+</description>
+    </item>
+    
+    <item>
+      <title>Copenhagen adduction exercise can increase eccentric strength and mitigate the risk of groin problems: but how much is enough!</title>
+      <link>https://lasseishoi.netlify.app/publication/2023-09-12-hip-arthroscopy-prediction/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2023-09-12-hip-arthroscopy-prediction/</guid>
+      <description>
 
 
 </description>

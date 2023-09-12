@@ -1,61 +1,36 @@
- ---
-   author_notes:
-   -
-   -
-   -
-   -
-   -
-   -
-   -
-   -
-   authors:
-  - admin
- -
- -
- -
- -
--
- -
- - 
- date: "2022-05-09T00:00:00Z"
- doi: ""
- featured: false
- image:
-   caption:
-   focal_point: ""
- preview_only: false
- projects: []
- publication: ''
- publication_short: ""
- publication_types:
-   - "2"
- publishDate: "2022-05-09T00:00:00Z"
- slides:
-   summary:
-   tags:
-   -
- -
- -
- title: "Hip arthrscopy Prediction"
- url_code: ""
- url_dataset: ""
- url_pdf: ""
- url_poster: ""
- url_project: ""
- url_slides: ""
- url_source:
- url_video: ""
- ---
-  # Abstract
-
-   **Purpose**
-
-
- **Methods**
-
-
- **Results**
-
-
- **Conclusion**
-
+---
+author_notes:
+- 
+- 
+authors:
+- admin 
+- Kristian Thorborg
+date: "2021-01-01T00:00:00Z"
+doi: ""
+featured: false
+image: 
+  caption: 
+  focal_point: ""
+  preview_only: false
+projects: []
+publication: 'British Journal of Sports Medicine, Doi.org/10.1136/bjsports-2020-103564'
+publication_short: ""
+publication_types:
+- "2"
+publishDate: "2021-01-01T00:00:00Z"
+slides: 
+summary: 
+tags:
+- Groin
+- Copenhagen Adduction
+- Editorial
+title: "Copenhagen adduction exercise can increase eccentric strength and mitigate the risk of groin problems: but how much is enough!"
+url_code: ""
+url_dataset: ""
+url_pdf: ""
+url_poster: ""
+url_project: ""
+url_slides: ""
+url_source: https://bjsm.bmj.com/content/55/19/1066
+url_video: ""
+---
