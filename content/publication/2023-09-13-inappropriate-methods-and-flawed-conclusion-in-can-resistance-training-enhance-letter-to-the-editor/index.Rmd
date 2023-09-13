@@ -1,0 +1,43 @@
+---
+author_notes:
+-
+-
+-
+-
+-
+-
+-
+-
+authors:
+- admin
+- Mikkel Bek Clausen
+- Per Aagaard
+date: "2018-01-01T00:00:00Z"
+doi: ""
+featured: false
+image:
+caption:
+focal_point: ""
+preview_only: false
+projects: []
+publication: '*J Strength Cond Res 2018 Jan;32*(1):e1-e2. doi: 10.1519/JSC.0000000000002305'
+publication_short: ""
+publication_types:
+  - "2"
+publishDate: "2018-01-01T00:00:00Z"
+slides:
+summary:
+tags:
+- Letter to the editor
+- Rate of force development
+- Strength training
+title: "Inappropriate Methods and Flawed Conclusion in: Can Resistance Training Enhance the Rapid Force Development in Unloaded Dynamic Isoinertial Multijoint Movements? A Systematic Review"
+url_code: ""
+url_dataset: ""
+url_pdf: ""
+url_poster: ""
+url_project: ""
+url_slides: ""
+url_source: https://journals.lww.com/nsca-jscr/fulltext/2018/01000/inappropriate_methods_and_flawed_conclusion_in_.38.aspx
+url_video: ""
+---

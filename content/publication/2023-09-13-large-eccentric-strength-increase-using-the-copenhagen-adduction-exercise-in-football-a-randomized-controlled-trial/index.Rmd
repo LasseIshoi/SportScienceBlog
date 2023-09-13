@@ -23,7 +23,7 @@ image:
  focal_point: ""
 preview_only: false
 projects: []
-publication: '*Scand J Med Sci Sports, 26*(11):1334-1342.'
+publication: '*Scand J Med Sci Sports, 26*(11):1334-1342'
 publication_short: ""
 publication_types:
 - "2"

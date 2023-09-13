@@ -23,7 +23,7 @@ caption:
 focal_point: ""
 preview_only: false
 projects: []
-publication: '*J Sports Sci 2018 Jul;36*(14):1663-1672.'
+publication: '*J Sports Sci 2018 Jul;36*(14):1663-1672'
 publication_short: ""
 publication_types:
   - "2"

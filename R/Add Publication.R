@@ -1,9 +1,9 @@
 ##Add publication##
 
-Paper_Name <- "Large eccentric strength increase using the Copenhagen Adduction exercise in football: A randomized controlled trial"
+Paper_Name <- "Inappropriate Methods and Flawed Conclusion in Can Resistance Training Enhance the Rapid Force Development in Unloaded Dynamic Isoinertial Multijoint Movements"
 
 
-blogdown::new_post(title = Paper_Name,  author = "Lasse Ishøi", subdir = "publication", ext = ".Rmd")
+blogdown::new_post(title = Paper_Name,  author = "", subdir = "publication", ext = ".Rmd")
 
 #Add in .Rmd file
 
