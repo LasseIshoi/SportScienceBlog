@@ -1,0 +1,58 @@
+---
+author_notes:
+-
+-
+-
+-
+-
+-
+-
+-
+authors:
+- admin
+- Per Holmich
+- Per Aagaard
+- Kristian Thorborg
+- Thomas Bandholm
+- Andreas Serner
+date: "2018-07-01T00:00:00Z"
+doi: ""
+featured: false
+image:
+caption:
+focal_point: ""
+preview_only: false
+projects: []
+publication: '*J Sports Sci 2018 Jul;36*(14):1663-1672.'
+publication_short: ""
+publication_types:
+  - "2"
+publishDate: "2022-07-01T00:00:00Z"
+slides:
+summary:
+tags:
+- Nordic Hamstring
+- Sprint Running
+- RCT
+- Strength
+title: "Effects of the Nordic Hamstring exercise on sprint capacity in male football players: a randomized controlled trial"
+url_code: ""
+url_dataset: ""
+url_pdf: ""
+url_poster: ""
+url_project: ""
+url_slides: ""
+url_source: https://www.tandfonline.com/doi/abs/10.1080/02640414.2017.1409609?journalCode=rjsp20
+url_video: ""
+---
+  **Purpose**
+  This assessor-blinded, randomized controlled superiority trial investigated the efficacy of the 10-week Nordic Hamstring exercise (NHE) protocol on sprint performance in football players. 
+  
+  **Methods**
+  Thirty-five amateur male players (age: 17-26 years) were randomized to a do-as-usual control group (CG; n = 17) or to 10-weeks of supervised strength training using the NHE in-season (IG; n = 18). A repeated-sprint test, consisting of 4 × 6 10 m sprints, with 15 s recovery period between sprints and 180 s between sets, was conducted to evaluate total sprint time as the primary outcome. Secondary outcomes were best 10 m sprint time (10mST) and sprint time during the last sprint (L10mST). Additionally, peak eccentric hamstring strength (ECC-PHS) and eccentric hamstring strength capacity (ECC-CAPHS) were measured during the NHE.
+  
+  **Results**
+   Ten players were lost to follow-up, thus 25 players were analyzed (CG n = 14; IG n = 11). Between-group differences in mean changes were observed in favor of the IG for sprint performance outcomes; TST (-0.649 s, p = 0.056, d = 0.38), 10mST (-0.047 s, p = 0.005, d = 0.64) and L10mST (-0.052 s, p = 0.094, d = 0.59), and for strength outcomes; ECC-PHS (62.3 N, p = 0.006, d = 0.92), and ECC-CAPHS (951 N, p = 0.005, d = 0.95).
+  
+  **Conclusion**
+ In conclusion, the NHE showed small-to-medium improvements in sprint performance and large increases in peak eccentric hamstring strength and 

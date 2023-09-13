@@ -1,0 +1,59 @@
+---
+author_notes:
+-
+-
+-
+-
+-
+-
+-
+-
+authors:
+- admin
+- Chrstian Sørensen
+- Nikolaj Kaae
+- Lars Bo Jørgensen
+- Per Holmich
+- Andreas Serner
+date: "2016-11-01T00:00:00Z"
+doi: ""
+featured: false
+image:
+ caption:
+ focal_point: ""
+preview_only: false
+projects: []
+publication: '*Scand J Med Sci Sports, 26*(11):1334-1342.'
+publication_short: ""
+publication_types:
+- "2"
+publishDate: "2016-11-01T00:00:00Z"
+slides:
+summary:
+tags:
+- Groin
+- Copenhagen Adduction
+- Strength
+- RCT
+title: "Large eccentric strength increase using the Copenhagen Adduction exercise in football: A randomized controlled trial"
+url_code: ""
+url_dataset: ""
+url_pdf: ""
+url_poster: ""
+url_project: ""
+url_slides: ""
+url_source: https://onlinelibrary.wiley.com/doi/10.1111/sms.12585
+url_video: ""
+---
+
+**Purpose**
+   Hip adductor injuries are frequent in football, and players with low adductor strength appear to be at increased risk of injury.    High adductor muscle activity has been shown in the Copenhagen Adduction exercise (CA); however, an associated strength gain has    not been investigated. This study aims to examine the eccentric hip adduction strength (EHAD) gain using the CA in-season.
+
+ **Methods**
+   Two U-19 sub-elite football teams, including 24 football players, were randomized to either an 8-week supervised progressive training program in addition to the usual training (intervention) or to continue training as usual (control). EHAD, eccentric hip abduction strength (EHAB), and side-bridge endurance were measured using reliable test procedures at baseline and follow-up by a blinded tester.
+
+ **Results**
+There was a significant interaction between group and time on EHAD, EHAB, and EHAD/EHAB ratio (P < 0.025). The intervention group demonstrated a 35.7% increase in EHAD (P < 0.001); a 20.3% increase in EHAB (P = 0.003), and 12.3% increase in EHAD/EHAB ratio (P = 0.019). No significant within-group differences were found in the control group (P > 0.335). Compliance was 91.25%, and median muscle soreness ranged from 0 to 2.
+
+ **Conclusion**
+The CA implemented in-season with an 8-week progressive training program elicited a large significant increase in EHAD, EHAB, and EHAD/EHAB ratio
