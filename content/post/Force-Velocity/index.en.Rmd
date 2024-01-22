@@ -4,10 +4,10 @@ author: 'Lasse Ishøi'
 date: '2023-03-13'
 categories: []
 tags: []
-subtitle: "A walkthrough of the TidySpectrum R Package"
-summary: "From messy csv files to a tidy R format"
+subtitle: "Automisation using using the CatapultR package"
+summary: "A walkthrough of how to calculate the force-velocity profile in R"
 authors: []
-lastmod: '2022-03-13T13:18:49+01:00'
+lastmod: '2024-01-22T13:18:49+01:00'
 featured: yes
 image: 
   caption: ''
