@@ -1,6 +1,6 @@
 ##Add publication##
 
-Paper_Name <- "Inappropriate Methods and Flawed Conclusion in Can Resistance Training Enhance the Rapid Force Development in Unloaded Dynamic Isoinertial Multijoint Movements"
+Paper_Name <- "Inappropriate Methods and Flawed Conclusion in Can Resistance Training Enhance - letter to the editor"
 
 
 blogdown::new_post(title = Paper_Name,  author = "", subdir = "publication", ext = ".Rmd")
