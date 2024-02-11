@@ -1,11 +1,11 @@
 ---
-title: Force Velocity
+title: In Situ Acceleration-Speed Profile
 author: 'Lasse Ishøi'
 date: '2023-03-13'
 categories: []
 tags: []
 subtitle: "Automisation using using the CatapultR package"
-summary: "A walkthrough of how to calculate the force-velocity profile in R"
+summary: "A walkthrough of how to calculate the acceleration-speed profile in R"
 authors: []
 lastmod: '2024-01-22T13:18:49+01:00'
 featured: yes
@@ -15,3 +15,311 @@ image:
   preview_only: no
 projects: []
 ---
+
+The In Situ Acceleration-Speed Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the Acceleration-Speed profile is in game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__ by JB Morin and the following scienctific papers: 
+
+* Paper 1
+* Paper 2
+* Paper 3
+
+This post serves as a walkthrough of how the calculation can be made relatively easy in R without no need to download raw data csv files manually. The prerequisite is Catapult GPS data and the __[catapultR package](http://catapultr.catapultsports.com/)__ which serves as a wrapper for the catapult API. 
+
+I start of by creating a group of functions based on the catapultR package. I load the following packages:
+```{r load libraries, echo=TRUE, message=FALSE}
+
+library(catapultR)
+library(tidyverse)
+library(lubridate)
+
+
+
+```
+
+and set a few placeholder variables and the API connection:
+```{r placeholder, echo=TRUE, eval=FALSE}
+
+#Set player name, and date range for the data of interest
+playerName <- name
+startDate <- startdate
+endDate <- enddate
+
+
+#Get API Access
+sToken <- stoken
+sRegion <- sregion
+
+
+#Setup API connection
+token <- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)
+
+```
+
+The next code chunk uses several functions from the catapultR package to retrieve the raw 10HZ sensor data via the API connection. We use the three parameters __playerName__, __startDate__, and __endDate__ to specify the data of interest.
+
+```{r get data from API, echo=TRUE, eval=FALSE}
+
+#overview of athletes connected to the Token user
+athletes <- ofCloudGetAthletes(token)
+
+#Use playerName to identify associated athlete id
+athletes$player_name <- paste(athletes$first_name, athletes$last_name)
+athleteID <- athletes$id[athletes$player_name==playerName]
+
+# get activies from the specified period
+from <- as.integer(as.POSIXct(as.Date(startDate, format="%d-%m-%Y")))
+to <- as.integer(as.POSIXct(as.Date(endDate, format="%d-%m-%Y")))
+activities <- ofCloudGetActivities(token, from = from, to = to)
+
+#loop over the activities for the specific athlete to get the 10Hz raw data
+#Create output variable as a list using the vector function with length equal to number of activities
+rawData <- vector("list", nrow(activities))
+
+
+#for loop using the ofCloudGetActivitySensorData function which takes the athleteID and an activity as arguments. 
+#"Try" function suppresses an error in the for loop if the athelte is not part of an activity.
+for (i in seq_along(activities)) {try(
+rawData[[i]] <- ofCloudGetActivitySensorData(
+  token,
+  athlete_id = athleteID,
+  activity_id = activities$id[[i]],
+  parameters = c("ts", 
+                 "cs", 
+                 "lat", 
+                 "long", 
+                 "xy", 
+                 "o", 
+                 "v", 
+                 "rv", 
+                 "a", 
+                 "hr", 
+                 "pl", 
+                 "sl", 
+                 "mp", 
+                 "pq", 
+                 "ref", 
+                 "hdop")), 
+  silent = TRUE)
+}
+
+#map function to unnest the data (gps variables) column across the list. 
+#"Possibly" function secures that the unnest function does not stop due to error
+
+rawData_list <- rawData %>%
+                            map(possibly(~unnest(data = ., cols = "data"), NULL)) %>%
+#delete empty lists - these are activites where the player of interest has not participated
+                            compact()
+
+#mutate a time column using luridate based on ts (epoch), and rename columns
+rawData_list <-  rawData_list %>% map(~mutate(.data = ., timestamp = as_datetime(.$ts),
+                                                          seconds = round(cs/100, 1),
+                                                          elapsed_time = (row_number()-1)/10)) %>%
+                                  map(~rename(.data = ., latitude = lat,
+                                              longitude = long,
+                                              position_x = x,
+                                              position_y = y,
+                                              velocity = v,
+                                              velocity_raw = rv,
+                                              acceleration = a,
+                                              total_distance = o,
+                                              heart_rate = hr,
+                                              player_load = pl,
+                                              smoothed_load = sl,
+                                              metabolic_power = mp,
+                                              positional_quality = pq,
+                                              number_satelites = ref))
+
+
+```
+
+To make it easier going forward I wrap the above code in a function:
+
+```{r get data function,  echo=TRUE, eval=FALSE}
+
+get_raw_period_data <- function(tag_name, filter_period, startdate, enddate, stoken, sregion) {
+
+  playerName <- name
+startDate <- startdate
+endDate <- enddate
+
+
+sToken <- stoken
+sRegion <- sregion
+
+token <- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)
+
+athletes <- ofCloudGetAthletes(token)
+
+athletes$player_name <- paste(athletes$first_name, athletes$last_name)
+athleteID <- athletes$id[athletes$player_name==playerName]
+
+from <- as.integer(as.POSIXct(as.Date(startDate, format="%d-%m-%Y")))
+to <- as.integer(as.POSIXct(as.Date(endDate, format="%d-%m-%Y")))
+activities <- ofCloudGetActivities(token, from = from, to = to)
+
+rawData <- vector("list", nrow(activities))
+
+
+for (i in seq_along(activities)) {try(
+rawData[[i]] <- ofCloudGetActivitySensorData(
+  token,
+  athlete_id = athleteID,
+  activity_id = activities$id[[i]],
+  parameters = c("ts", 
+                 "cs", 
+                 "lat", 
+                 "long", 
+                 "xy", 
+                 "o", 
+                 "v", 
+                 "rv", 
+                 "a", 
+                 "hr", 
+                 "pl", 
+                 "sl", 
+                 "mp", 
+                 "pq", 
+                 "ref", 
+                 "hdop")), 
+  silent = TRUE)
+}
+
+
+rawData_list <- rawData %>%
+                map(possibly(~unnest(data = ., cols = "data"), NULL)) %>%
+                compact()
+
+rawData_list <-  rawData_list %>% map(~mutate(.data = ., timestamp = as_datetime(.$ts),
+                                 seconds = round(cs/100, 1),
+                                 elapsed_time = (row_number()-1)/10)) %>%
+                                  map(~rename(.data = ., latitude = lat,
+                                              longitude = long,
+                                              position_x = x,
+                                              position_y = y,
+                                              velocity = v,
+                                              velocity_raw = rv,
+                                              acceleration = a,
+                                              total_distance = o,
+                                              heart_rate = hr,
+                                              player_load = pl,
+                                              smoothed_load = sl,
+                                              metabolic_power = mp,
+                                              positional_quality = pq,
+                                              number_satelites = ref))
+}
+```
+
+The final step I need to solve before I can use the function is to identify the __sToken__ and the __sRegion__ (These are text strings used to access your user profile via the API, and can can be found in the the Catapult Cloud). WIth that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:
+
+```{r get data example,  echo=TRUE, eval=FALSE}
+
+#I want to get data from Player A and in the data range 5th to 10th January 2024
+data <- get_raw_period_data(name = "Player A", 
+                            startdate = "05-01-2024", 
+                            enddate = "10-01-2024", 
+                            stoken = "xxx", 
+                            sregion = "xxx")
+
+```
+
+The data comes in a list format, with each list representing an activity. In this case, I get 4 activities (training session), which may be on the low end for obtaining a reliable profile, but that is not the main focus for now.
+
+```{r load the data, echo=FALSE}
+
+#Preview of the data
+load("data.RData")
+
+
+
+```
+
+```{r preview data}
+
+#Preview of the data (selecting a few variables)
+data[[1]] %>% 
+  select(athlete_first_name, velocity, velocity_raw, acceleration, elapsed_time) %>%
+  top_n(10)
+
+
+```
+
+
+```{r AS profile}
+
+library(signal)
+library(runner)
+library(useful)
+library(InSituASProfile)
+
+#Set filter details
+bf4 <- butter(2, 0.15, type="low") 
+
+
+#Apply filter
+rawData_list <- data %>%
+                    #Delete NA's
+                    map(~na.omit(.)) %>%
+                    map(~mutate(.data = ., velocity_bw = filtfilt(bf4, .$velocity))) %>%
+                    map(~mutate(.data = ., velocity_raw_bw = filtfilt(bf4, .$velocity_raw)))
+
+
+
+rawData_list_acc <- rawData_list %>% 
+                    map(~mutate(.data = ., 
+                                reg_acc = runner(x = ., 
+                                                 k = 10, 
+                                                 na_pad = FALSE, 
+                                                 f = function(x){
+                                                 model <- lm(velocity_raw_bw ~ elapsed_time,
+                                                 data = x)
+                                  coefficients(model)[2]})))
+
+
+rawData_list_shifted <- rawData_list_acc %>%
+                                     map(~shift.column(data = ., 
+                                                       columns = "reg_acc",
+                                                       newNames = "acc", 
+                                                       up = TRUE, len = 2))
+
+
+all_data <- rawData_list_shifted %>%
+                            bind_rows()
+
+###derive the acceleration from speed and time
+
+ all_data <- rawData_list %>%
+                             bind_rows()
+  all_data$accel_bw <- c(NA, with(all_data, diff(velocity_bw)/diff(elapsed_time)))
+  all_data$acc <- c(NA, with(all_data, diff(velocity_raw_bw)/diff(elapsed_time)))
+  
+  ##########################################
+
+
+
+trial_mutate_slice <- all_data %>% slice(40476:40550)
+
+trial_mutate_slice <- trial_mutate_slice %>% mutate(time = row_number())
+
+ggplot(trial_mutate_slice, aes (x = elapsed_time)) +
+  geom_line(aes(y = velocity), color = "red") +
+  geom_line(aes(y = velocity_bw), color = "green") +
+  geom_line(aes(y= velocity_raw_bw), color = "blue") + 
+  geom_line(aes(y = acceleration), color = "black") + 
+  geom_line(aes(y = acc), color = "orange") +
+  theme_bw()
+
+ all_data %>%
+  ggplot(aes(x = velocity_raw_bw, y = acc)) + 
+        geom_point(size = 0.2) + 
+        ylim(0,NA) + 
+        geom_vline(xintercept = 3, color = "red")
+ 
+ 
+ all_data <- all_data %>% 
+            rename(speed = velocity_raw_bw)
+
+InSituASProfile::prepare_data(all_data,print_plot = TRUE)
+InSituASProfile::get_AS_Profile()
+  
+
+```
+
