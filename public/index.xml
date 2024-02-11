@@ -124,17 +124,6 @@ The variance of the distribution is $\sigma^{2}$.
     </item>
     
     <item>
-      <title>Force Velocity</title>
-      <link>https://lasseishoi.netlify.app/post/force-velocity/</link>
-      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/post/force-velocity/</guid>
-      <description>
-
-
-</description>
-    </item>
-    
-    <item>
       <title>How to tidy Second Spectrum Physical Splits csv files</title>
       <link>https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/</link>
       <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
@@ -7956,6 +7945,224 @@ TeamA - TeamB
 ## i Please use `linewidth` instead.&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/2022-02-17-tidyspectrum/index.en_files/figure-html/plot-1.png&#34; width=&#34;1920&#34; /&gt;
 Thanks for reading. Hopefully you found it useful/interesting.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>In Situ Acceleration-Speed Profile</title>
+      <link>https://lasseishoi.netlify.app/post/force-velocity/</link>
+      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/post/force-velocity/</guid>
+      <description>
+
+
+&lt;p&gt;The In Situ Acceleration-Speed Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the Acceleration-Speed profile is in game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the &lt;strong&gt;&lt;a href=&#34;https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/&#34;&gt;blogpost&lt;/a&gt;&lt;/strong&gt; by JB Morin and the following scienctific papers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Paper 1&lt;/li&gt;
+&lt;li&gt;Paper 2&lt;/li&gt;
+&lt;li&gt;Paper 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This post serves as a walkthrough of how the calculation can be made relatively easy in R without no need to download raw data csv files manually. The prerequisite is Catapult GPS data and the &lt;strong&gt;&lt;a href=&#34;http://catapultr.catapultsports.com/&#34;&gt;catapultR package&lt;/a&gt;&lt;/strong&gt; which serves as a wrapper for the catapult API.&lt;/p&gt;
+&lt;p&gt;I start of by creating a group of functions based on the catapultR package. I load the following packages:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(catapultR)
+library(tidyverse)
+library(lubridate)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and set a few placeholder variables and the API connection:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Set player name, and date range for the data of interest
+playerName &amp;lt;- name
+startDate &amp;lt;- startdate
+endDate &amp;lt;- enddate
+
+
+#Get API Access
+sToken &amp;lt;- stoken
+sRegion &amp;lt;- sregion
+
+
+#Setup API connection
+token &amp;lt;- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The next code chunk uses several functions from the catapultR package to retrieve the raw 10HZ sensor data via the API connection. We use the three parameters &lt;strong&gt;playerName&lt;/strong&gt;, &lt;strong&gt;startDate&lt;/strong&gt;, and &lt;strong&gt;endDate&lt;/strong&gt; to specify the data of interest.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#overview of athletes connected to the Token user
+athletes &amp;lt;- ofCloudGetAthletes(token)
+
+#Use playerName to identify associated athlete id
+athletes$player_name &amp;lt;- paste(athletes$first_name, athletes$last_name)
+athleteID &amp;lt;- athletes$id[athletes$player_name==playerName]
+
+# get activies from the specified period
+from &amp;lt;- as.integer(as.POSIXct(as.Date(startDate, format=&amp;quot;%d-%m-%Y&amp;quot;)))
+to &amp;lt;- as.integer(as.POSIXct(as.Date(endDate, format=&amp;quot;%d-%m-%Y&amp;quot;)))
+activities &amp;lt;- ofCloudGetActivities(token, from = from, to = to)
+
+#loop over the activities for the specific athlete to get the 10Hz raw data
+#Create output variable as a list using the vector function with length equal to number of activities
+rawData &amp;lt;- vector(&amp;quot;list&amp;quot;, nrow(activities))
+
+
+#for loop using the ofCloudGetActivitySensorData function which takes the athleteID and an activity as arguments. 
+#&amp;quot;Try&amp;quot; function suppresses an error in the for loop if the athelte is not part of an activity.
+for (i in seq_along(activities)) {try(
+rawData[[i]] &amp;lt;- ofCloudGetActivitySensorData(
+  token,
+  athlete_id = athleteID,
+  activity_id = activities$id[[i]],
+  parameters = c(&amp;quot;ts&amp;quot;, 
+                 &amp;quot;cs&amp;quot;, 
+                 &amp;quot;lat&amp;quot;, 
+                 &amp;quot;long&amp;quot;, 
+                 &amp;quot;xy&amp;quot;, 
+                 &amp;quot;o&amp;quot;, 
+                 &amp;quot;v&amp;quot;, 
+                 &amp;quot;rv&amp;quot;, 
+                 &amp;quot;a&amp;quot;, 
+                 &amp;quot;hr&amp;quot;, 
+                 &amp;quot;pl&amp;quot;, 
+                 &amp;quot;sl&amp;quot;, 
+                 &amp;quot;mp&amp;quot;, 
+                 &amp;quot;pq&amp;quot;, 
+                 &amp;quot;ref&amp;quot;, 
+                 &amp;quot;hdop&amp;quot;)), 
+  silent = TRUE)
+}
+
+#map function to unnest the data (gps variables) column across the list. 
+#&amp;quot;Possibly&amp;quot; function secures that the unnest function does not stop due to error
+
+rawData_list &amp;lt;- rawData %&amp;gt;%
+                            map(possibly(~unnest(data = ., cols = &amp;quot;data&amp;quot;), NULL)) %&amp;gt;%
+#delete empty lists - these are activites where the player of interest has not participated
+                            compact()
+
+#mutate a time column using luridate based on ts (epoch), and rename columns
+rawData_list &amp;lt;-  rawData_list %&amp;gt;% map(~mutate(.data = ., timestamp = as_datetime(.$ts),
+                                                          seconds = round(cs/100, 1),
+                                                          elapsed_time = (row_number()-1)/10)) %&amp;gt;%
+                                  map(~rename(.data = ., latitude = lat,
+                                              longitude = long,
+                                              position_x = x,
+                                              position_y = y,
+                                              velocity = v,
+                                              velocity_raw = rv,
+                                              acceleration = a,
+                                              total_distance = o,
+                                              heart_rate = hr,
+                                              player_load = pl,
+                                              smoothed_load = sl,
+                                              metabolic_power = mp,
+                                              positional_quality = pq,
+                                              number_satelites = ref))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To make it easier going forward I wrap the above code in a function:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_raw_period_data &amp;lt;- function(tag_name, filter_period, startdate, enddate, stoken, sregion) {
+
+  playerName &amp;lt;- name
+startDate &amp;lt;- startdate
+endDate &amp;lt;- enddate
+
+
+sToken &amp;lt;- stoken
+sRegion &amp;lt;- sregion
+
+token &amp;lt;- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)
+
+athletes &amp;lt;- ofCloudGetAthletes(token)
+
+athletes$player_name &amp;lt;- paste(athletes$first_name, athletes$last_name)
+athleteID &amp;lt;- athletes$id[athletes$player_name==playerName]
+
+from &amp;lt;- as.integer(as.POSIXct(as.Date(startDate, format=&amp;quot;%d-%m-%Y&amp;quot;)))
+to &amp;lt;- as.integer(as.POSIXct(as.Date(endDate, format=&amp;quot;%d-%m-%Y&amp;quot;)))
+activities &amp;lt;- ofCloudGetActivities(token, from = from, to = to)
+
+rawData &amp;lt;- vector(&amp;quot;list&amp;quot;, nrow(activities))
+
+
+for (i in seq_along(activities)) {try(
+rawData[[i]] &amp;lt;- ofCloudGetActivitySensorData(
+  token,
+  athlete_id = athleteID,
+  activity_id = activities$id[[i]],
+  parameters = c(&amp;quot;ts&amp;quot;, 
+                 &amp;quot;cs&amp;quot;, 
+                 &amp;quot;lat&amp;quot;, 
+                 &amp;quot;long&amp;quot;, 
+                 &amp;quot;xy&amp;quot;, 
+                 &amp;quot;o&amp;quot;, 
+                 &amp;quot;v&amp;quot;, 
+                 &amp;quot;rv&amp;quot;, 
+                 &amp;quot;a&amp;quot;, 
+                 &amp;quot;hr&amp;quot;, 
+                 &amp;quot;pl&amp;quot;, 
+                 &amp;quot;sl&amp;quot;, 
+                 &amp;quot;mp&amp;quot;, 
+                 &amp;quot;pq&amp;quot;, 
+                 &amp;quot;ref&amp;quot;, 
+                 &amp;quot;hdop&amp;quot;)), 
+  silent = TRUE)
+}
+
+
+rawData_list &amp;lt;- rawData %&amp;gt;%
+                map(possibly(~unnest(data = ., cols = &amp;quot;data&amp;quot;), NULL)) %&amp;gt;%
+                compact()
+
+rawData_list &amp;lt;-  rawData_list %&amp;gt;% map(~mutate(.data = ., timestamp = as_datetime(.$ts),
+                                 seconds = round(cs/100, 1),
+                                 elapsed_time = (row_number()-1)/10)) %&amp;gt;%
+                                  map(~rename(.data = ., latitude = lat,
+                                              longitude = long,
+                                              position_x = x,
+                                              position_y = y,
+                                              velocity = v,
+                                              velocity_raw = rv,
+                                              acceleration = a,
+                                              total_distance = o,
+                                              heart_rate = hr,
+                                              player_load = pl,
+                                              smoothed_load = sl,
+                                              metabolic_power = mp,
+                                              positional_quality = pq,
+                                              number_satelites = ref))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The final step I need to solve before I can use the function is to identify the &lt;strong&gt;sToken&lt;/strong&gt; and the &lt;strong&gt;sRegion&lt;/strong&gt; (These are text strings used to access your user profile via the API, and can can be found in the the Catapult Cloud). WIth that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#I want to get data from Player A and in the data range 5th to 10th January 2024
+data &amp;lt;- get_raw_period_data(name = &amp;quot;Player A&amp;quot;, 
+                            startdate = &amp;quot;05-01-2024&amp;quot;, 
+                            enddate = &amp;quot;10-01-2024&amp;quot;, 
+                            stoken = &amp;quot;xxx&amp;quot;, 
+                            sregion = &amp;quot;xxx&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The data comes in a list format, with each list representing an activity. In this case, I get 4 activities (training session), which may be on the low end for obtaining a reliable profile, but that is not the main focus for now.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data[[1]] %&amp;gt;% top_n(20)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Selecting by elapsed_time&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 20 × 29
+##    athlete_id device_id stream_type player_id athlete_first_name
+##    &amp;lt;chr&amp;gt;          &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;       &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;             
+##  1 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  2 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  3 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  4 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  5 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  6 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  7 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  8 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+##  9 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 10 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 11 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 12 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 13 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 14 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 15 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 16 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 17 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 18 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 19 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## 20 xxxx          112759 gps         &amp;quot;&amp;quot;        Player            
+## # ℹ 24 more variables: athlete_last_name &amp;lt;chr&amp;gt;, jersey &amp;lt;chr&amp;gt;, team_id &amp;lt;chr&amp;gt;,
+## #   team_name &amp;lt;chr&amp;gt;, ts &amp;lt;int&amp;gt;, cs &amp;lt;int&amp;gt;, latitude &amp;lt;dbl&amp;gt;, longitude &amp;lt;dbl&amp;gt;,
+## #   position_x &amp;lt;dbl&amp;gt;, position_y &amp;lt;dbl&amp;gt;, total_distance &amp;lt;dbl&amp;gt;, velocity &amp;lt;dbl&amp;gt;,
+## #   velocity_raw &amp;lt;dbl&amp;gt;, acceleration &amp;lt;dbl&amp;gt;, heart_rate &amp;lt;int&amp;gt;,
+## #   player_load &amp;lt;dbl&amp;gt;, smoothed_load &amp;lt;dbl&amp;gt;, metabolic_power &amp;lt;dbl&amp;gt;,
+## #   positional_quality &amp;lt;dbl&amp;gt;, number_satelites &amp;lt;int&amp;gt;, hdop &amp;lt;dbl&amp;gt;,
+## #   timestamp &amp;lt;dttm&amp;gt;, seconds &amp;lt;dbl&amp;gt;, elapsed_time &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

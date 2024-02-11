@@ -17,6 +17,7 @@ advanced:
 ---
 
 ## by Lasse Ishøi,
+### Head of Sport and Data Science At F.C. Nordsjælland
 #### Physiotherapist, Sport Scientist, PhD
 
-#### Here you will find my resume, various sport science-related blog posts, and my R packages which I mainly develop to ease my daily work as Head of Sport and Data Science at F.C. Nordsjælland
+#### You will find my resume, various sport science-related blog posts, and my lightweight R packages developed to ease the daily work of a sport scientist 

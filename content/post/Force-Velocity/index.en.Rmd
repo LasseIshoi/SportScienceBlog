@@ -16,7 +16,7 @@ image:
 projects: []
 ---
 
-The In Situ Acceleration-Speed Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the Acceleration-Speed profile is in game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__ by JB Morin and the following scienctific papers: 
+The In Situ Acceleration-Speed Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the Acceleration-Speed profile is in-game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__ by JB Morin and the following scientific papers: 
 
 * Paper 1
 * Paper 2
@@ -208,7 +208,7 @@ rawData_list <-  rawData_list %>% map(~mutate(.data = ., timestamp = as_datetime
 }
 ```
 
-The final step I need to solve before I can use the function is to identify the __sToken__ and the __sRegion__ (These are text strings used to access your user profile via the API, and can can be found in the the Catapult Cloud). WIth that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:
+The final step I need to solve before I can use the function is to identify the __sToken__ and the __sRegion__ (These are text strings used to access your user profile via the API, and can can be found in the Catapult Cloud). With that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:
 
 ```{r get data example,  echo=TRUE, eval=FALSE}
 
