@@ -25,6 +25,8 @@ interests:
 - Sport statistics
 - GPS Analyses
 - R
+- Power BI
+- Power Apps
 organizations:
 - name:
   url: 
@@ -52,12 +54,12 @@ superuser: true
 title: Lasse Ishøi
 ---
 
-I am an aspiring researcher, physiotherapist, and sports scientist with a great interest in hip/groin and hamstring injuries, and data analytics.  
+I am a clinical researcher with a background in sport science and physiotherapy with a great interest in hip/groin and hamstring injuries, and data analytics.  
 
-I serve as the Head of Sport and Data Science in **[Football Club Nordsjælland](https://www.fcn.dk)**, a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to **[Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/))**, where I focus on structured data collection and associated analyses to support physical trainers and physiotherapists.
+I serve as the Head of Sport and Data Science in **[Football Club Nordsjælland](https://www.fcn.dk)**, a Danish premier league football club with associated youth academies in Denmark and Ghana (rated as one of the world’s best academies according to **[Scouted Football](https://www.scoutedftbl.com/best-young-football-players/academies/))**, where I focus on structured data collection and associated analyses to support desicion-making processes. As part of this position, I have developed Power Apps for streamlined data collection, Power BI and R Shiny Dashboards for reporting, and also been involved in developing an SQL database.
 
-I am also a postdoctoral researcher at the **[Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx)** at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.  
+I also work as postdoctoral researcher at the **[Sports Orthopedic Research Center - Copenhagen (SORC-C)](https://www.hvidovrehospital.dk/sorc-c/Pages/default.aspx)** at Hvidovre Hospital; an International Olympic Committee (IOC) research center centered around prevention, diagnostics and treatment of musculoskeletal problems.  
 
-I completed my **[PhD]({{< ref "event/example/index.md" >}})** in 2022 which was conducted at SORC-C and was entitled "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return t Sport, and Hip Muscle Strength After Hip Arthroscopy".
+I completed my **[PhD]({{< ref "event/example/index.md" >}})** in 2022 at SORC-C entitled "Femoroacetabular Impingement Syndrome: Patient Acceptable Symptom State, Return t Sport, and Hip Muscle Strength After Hip Arthroscopy".
 
 

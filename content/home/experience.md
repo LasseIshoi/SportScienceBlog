@@ -37,6 +37,8 @@ experience:
         * Data analyses
         * R Studio / Shiny
         * SQL Server
+        * Power BI
+        * Power Apps
   
   
   - title: Postdoctoral Researcher

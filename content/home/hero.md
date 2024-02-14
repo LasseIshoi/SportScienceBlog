@@ -16,8 +16,8 @@ advanced:
   css_class: fullscreen
 ---
 
-## by Lasse Ishøi,
-### Head of Sport and Data Science At F.C. Nordsjælland
-#### Physiotherapist, Sport Scientist, PhD
+## by Lasse Ishøi, PhD
+#### Head of Sport and Data Science At F.C. Nordsjælland
+#### Sport Scientist - Clinical Researcher - Physiotherapist
 
 #### You will find my resume, various sport science-related blog posts, and my lightweight R packages developed to ease the daily work of a sport scientist 
