@@ -1,6 +1,6 @@
 ##Add publication##
 
-Paper_Name <- "Inappropriate Methods and Flawed Conclusion in Can Resistance Training Enhance - letter to the editor"
+Paper_Name <- "Trial"
 
 
 blogdown::new_post(title = Paper_Name,  author = "", subdir = "publication", ext = ".Rmd")

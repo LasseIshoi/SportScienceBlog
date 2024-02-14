@@ -3,8 +3,17 @@
 
 blogdown::build_site()
 
+blogdown::check_content()
+
+blogdown::check_hugo()
+
+blogdown::check_netlify()
+
+blogdown::build_site(build_rmd = TRUE)
 
 blogdown::serve_site()
+
+
 
 
 blogdown::stop_server()

@@ -1,5 +1,5 @@
 ---
-title: Trial
+title: trial
 author: ''
 date: '2024-02-15'
 slug: trial
@@ -8,7 +8,7 @@ tags: []
 subtitle: ''
 summary: ''
 authors: []
-lastmod: '2024-02-15T00:25:57+01:00'
+lastmod: '2024-02-15T00:46:53+01:00'
 featured: no
 image:
   caption: ''
