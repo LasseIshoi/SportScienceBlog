@@ -5,12 +5,23 @@
     <link>https://lasseishoi.netlify.app/publication/</link>
       <atom:link href="https://lasseishoi.netlify.app/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Wed, 13 Sep 2023 09:31:05 +0200</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Thu, 15 Feb 2024 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>Publications</title>
       <link>https://lasseishoi.netlify.app/publication/</link>
     </image>
+    
+    <item>
+      <title>Trial</title>
+      <link>https://lasseishoi.netlify.app/publication/trial/</link>
+      <pubDate>Thu, 15 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/trial/</guid>
+      <description>
+
+
+</description>
+    </item>
     
     <item>
       <title>2023 09 13 Inappropriate Methods and Flawed Conclusion in Can Resistance Training Enhance the Rapid Force Development in Unloaded Dynamic Isoinertial Multijoint Movements a Systematic Review</title>
