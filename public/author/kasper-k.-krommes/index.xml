@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kasper K. Krommes | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/kasper-k.-krommes/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/kasper-k.-krommes/index.xml" rel="self" type="application/rss+xml" />
+    <description>Kasper K. Krommes</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
+      <title>Kasper K. Krommes</title>
+      <link>https://lasseishoi.netlify.app/author/kasper-k.-krommes/</link>
+    </image>
+    
+    <item>
+      <title>The Influence of Hamstring Muscle Peak Torque and Rate of Torque Development for Sprinting Performance in Football Players: A Cross-Sectional Study</title>
+      <link>https://lasseishoi.netlify.app/publication/2019-01-01_the_influence_of_ham/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2019-01-01_the_influence_of_ham/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

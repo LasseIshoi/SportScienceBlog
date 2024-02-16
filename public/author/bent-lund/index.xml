@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bent Lund | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/bent-lund/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/bent-lund/index.xml" rel="self" type="application/rss+xml" />
+    <description>Bent Lund</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
+      <title>Bent Lund</title>
+      <link>https://lasseishoi.netlify.app/author/bent-lund/</link>
+    </image>
+    
+    <item>
+      <title>[Femoroacetabular impingement syndrome]</title>
+      <link>https://lasseishoi.netlify.app/publication/2019-01-01_femoroacetabular_im/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2019-01-01_femoroacetabular_im/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Demographic and Radiographic Factors Associated With Intra-articular Hip Cartilage Injury: A Cross-sectional Study of 1511 Hip Arthroscopy Procedures</title>
+      <link>https://lasseishoi.netlify.app/publication/2019-01-01_demographic_and_radi/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2019-01-01_demographic_and_radi/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

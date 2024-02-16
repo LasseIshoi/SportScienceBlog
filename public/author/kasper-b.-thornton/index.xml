@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kasper B. Thornton | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/kasper-b.-thornton/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/kasper-b.-thornton/index.xml" rel="self" type="application/rss+xml" />
+    <description>Kasper B. Thornton</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Sat, 01 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
+      <title>Kasper B. Thornton</title>
+      <link>https://lasseishoi.netlify.app/author/kasper-b.-thornton/</link>
+    </image>
+    
+    <item>
+      <title>Hip adduction strength and provoked groin pain: A comparison of long-lever squeeze testing using the ForceFrame and the Copenhagen 5-Second-Squeeze test</title>
+      <link>https://lasseishoi.netlify.app/publication/2022-01-01_hip_adduction_streng/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2022-01-01_hip_adduction_streng/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rapid Spike in Hip Adduction Strength in Early Adolescent Footballers: A Study of 125 Elite Male Players From Youth to Senior</title>
+      <link>https://lasseishoi.netlify.app/publication/2022-01-01_rapid_spike_in_hip_a/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2022-01-01_rapid_spike_in_hip_a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hamstring and Quadriceps Muscle Strength in Youth to Senior Elite Soccer: A Cross-Sectional Study Including 125 Players</title>
+      <link>https://lasseishoi.netlify.app/publication/2021-01-01_hamstring_and_quadri/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2021-01-01_hamstring_and_quadri/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Influence of Hamstring Muscle Peak Torque and Rate of Torque Development for Sprinting Performance in Football Players: A Cross-Sectional Study</title>
+      <link>https://lasseishoi.netlify.app/publication/2019-01-01_the_influence_of_ham/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2019-01-01_the_influence_of_ham/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

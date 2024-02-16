@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Thomas Kallemose | LISportScience</title>
+    <link>https://lasseishoi.netlify.app/author/thomas-kallemose/</link>
+      <atom:link href="https://lasseishoi.netlify.app/author/thomas-kallemose/index.xml" rel="self" type="application/rss+xml" />
+    <description>Thomas Kallemose</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
+      <title>Thomas Kallemose</title>
+      <link>https://lasseishoi.netlify.app/author/thomas-kallemose/</link>
+    </image>
+    
+    <item>
+      <title>Stratified care in hip arthroscopy: can we predict successful and unsuccessful outcomes? Development and external temporal validation of multivariable prediction models</title>
+      <link>https://lasseishoi.netlify.app/publication/2023-01-01_stratified_care_in_h/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://lasseishoi.netlify.app/publication/2023-01-01_stratified_care_in_h/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
