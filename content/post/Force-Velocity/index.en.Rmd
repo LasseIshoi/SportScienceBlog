@@ -16,6 +16,13 @@ image:
 projects: []
 ---
 
+<style>
+body {
+  background-color: #bbdefb; /* Set your desired background color */
+}
+</style>
+
+
 ### Introduction
 
 The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__  or __[Presentation](https://www.youtube.com/watch?v=lZTDcP8hacE&list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&index=2&t=1224s)__ by JB Morin and/or the following scientific papers: 

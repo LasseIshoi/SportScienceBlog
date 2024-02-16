@@ -5,7 +5,7 @@
     <link>https://lasseishoi.netlify.app/post/</link>
       <atom:link href="https://lasseishoi.netlify.app/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Thu, 15 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Fri, 16 Feb 2024 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>Posts</title>
@@ -15,11 +15,16 @@
     <item>
       <title>In Situ Acceleration-Speed Profile</title>
       <link>https://lasseishoi.netlify.app/post/force-velocity/</link>
-      <pubDate>Thu, 15 Feb 2024 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 16 Feb 2024 00:00:00 +0000</pubDate>
       <guid>https://lasseishoi.netlify.app/post/force-velocity/</guid>
       <description>
 
 
+&lt;style&gt;
+body {
+  background-color: #bbdefb; /* Set your desired background color */
+}
+&lt;/style&gt;
 &lt;div id=&#34;introduction&#34; class=&#34;section level3&#34;&gt;
 &lt;h3&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the &lt;strong&gt;&lt;a href=&#34;https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/&#34;&gt;blogpost&lt;/a&gt;&lt;/strong&gt; or &lt;strong&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=lZTDcP8hacE&amp;amp;list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&amp;amp;index=2&amp;amp;t=1224s&#34;&gt;Presentation&lt;/a&gt;&lt;/strong&gt; by JB Morin and/or the following scientific papers:&lt;/p&gt;
