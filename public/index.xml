@@ -5,7 +5,7 @@
     <link>https://lasseishoi.netlify.app/</link>
       <atom:link href="https://lasseishoi.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     <description>LISportScience</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Wed, 08 May 2024 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2022-} Lasse Ishøi</copyright><lastBuildDate>Wed, 29 May 2024 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://lasseishoi.netlify.app/media/icon_hucba55b6d6add185d5221e19e25d5385d_3121468_512x512_fill_lanczos_center_3.png</url>
       <title>LISportScience</title>
@@ -110,7 +110,7 @@ The variance of the distribution is $\sigma^{2}$.
     <item>
       <title>In Situ Acceleration-Speed Profile</title>
       <link>https://lasseishoi.netlify.app/post/force-velocity/</link>
-      <pubDate>Wed, 08 May 2024 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 29 May 2024 00:00:00 +0000</pubDate>
       <guid>https://lasseishoi.netlify.app/post/force-velocity/</guid>
       <description>
 
@@ -546,8 +546,17 @@ rawData_list &amp;lt;- data %&amp;gt;%
 # Prepare data and inition plot
 InSituASProfile::prepare_data(all_data, print_plot = TRUE)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/force-velocity/index.en_files/figure-html/AS%20profile-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;InSituASProfile::get_AS_Profile()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The final model can be computed using either the 95 CI or Turkey boxplot method for outlier removal. The 95 CI method is the original method described in &lt;strong&gt;&lt;a href=&#34;https://pubmed.ncbi.nlm.nih.gov/34023754/&#34;&gt;Individual acceleration-speed profile in-situ: A proof of concept in professional football players&lt;/a&gt;&lt;/strong&gt;. This method initially fits a regression model, removes points outside of the 95 CI limits, before fitting the final model. The box plot method has recently been described in &lt;strong&gt;&lt;a href=&#34;https://pubmed.ncbi.nlm.nih.gov/37451206/&#34;&gt;Comparison of acceleration-speed profiles from training and competition to individual maximal sprint efforts&lt;/a&gt;&lt;/strong&gt;. This method uses the top 2 percent of accelerations for each velocity bin (0.1 m/s), constructs a box plot for each bin, and then removes points outside of the IQR * 1. Subsequently, the final regression model is fitted. By default, &lt;strong&gt;InSituASProfile::get_AS_Profile&lt;/strong&gt; uses the 95% CI outlier detection, but if you want to use the box plot method just set &lt;strong&gt;ci_outlier_detection = FALSE&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Using the 95% CI method
+InSituASProfile::get_AS_Profile(print_plot_regression_line = FALSE, 
+                                print_AS_plot = TRUE, 
+                                ci_outlier_detection = TRUE)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/force-velocity/index.en_files/figure-html/final%20model-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Using the box plot method
+InSituASProfile::get_AS_Profile(print_plot_regression_line = FALSE, 
+                                print_AS_plot = TRUE, 
+                                ci_outlier_detection = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/force-velocity/index.en_files/figure-html/final%20model-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>

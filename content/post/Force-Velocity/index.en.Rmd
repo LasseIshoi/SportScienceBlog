@@ -330,10 +330,21 @@ InSituASProfile::prepare_data(all_data, print_plot = TRUE)
 
 ```
 
+The final model can be computed using either the 95 CI or Turkey boxplot method for outlier removal. The 95 CI method is the original method described in __[Individual acceleration-speed profile in-situ: A proof of concept in professional football players](https://pubmed.ncbi.nlm.nih.gov/34023754/)__. This method initially fits a regression model, removes points outside of the 95 CI limits, before fitting the final model. The box plot method has recently been described in __[Comparison of acceleration-speed profiles from training and competition to individual maximal sprint efforts](https://pubmed.ncbi.nlm.nih.gov/37451206/)__. This method uses the top 2 percent of accelerations for each velocity bin (0.1 m/s), constructs a box plot for each bin, and then removes points outside of the IQR * 1. Subsequently, the final regression model is fitted. By default, __InSituASProfile::get_AS_Profile__ uses the 95% CI outlier detection, but if you want to use the box plot method just set __ci_outlier_detection = FALSE__.
+
 ```{r final model, warning=FALSE, message=FALSE}
 
-InSituASProfile::get_AS_Profile()
 
+#Using the 95% CI method
+InSituASProfile::get_AS_Profile(print_plot_regression_line = FALSE, 
+                                print_AS_plot = TRUE, 
+                                ci_outlier_detection = TRUE)
+
+
+#Using the box plot method
+InSituASProfile::get_AS_Profile(print_plot_regression_line = FALSE, 
+                                print_AS_plot = TRUE, 
+                                ci_outlier_detection = FALSE)
 
 ```
 
