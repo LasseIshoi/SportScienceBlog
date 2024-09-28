@@ -2,9 +2,9 @@
 bio: My research interests include sport science, sport physiotherapy, and sport injuries.
 education:
   courses:
-  - course: Graduate Certificate in Data Analytics for Sport Performance
-    institution: Victoria University, Australia
-    year: 2022 - 
+  - course: Statistics and Data Science
+    institution: Trinity University, Dublin
+    year: 2024 - 
   - course: PhD (Femoroacetabular impingement Syndrome)
     institution: University of Copenhagen, Denmark
     year: 2019 - 2022

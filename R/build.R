@@ -13,7 +13,7 @@
 
 #blogdown::serve_site()
 
-#blogdown::new_post(title = "trial")
+#blogdown::new_post(title = "Basic Probability", ext = '.Rmd')
 
 
 #blogdown::stop_server()
