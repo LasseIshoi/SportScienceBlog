@@ -4,7 +4,7 @@ author: 'Lasse Ishøi'
 date: "`r Sys.Date()`"
 categories: []
 tags: []
-subtitle: "Automisation using using the CatapultR package"
+subtitle: "Towards automisation using the CatapultR package"
 summary: "A simple how-to guide using R Studio"
 authors: []
 lastmod: "`r Sys.Date()`"
@@ -16,16 +16,16 @@ image:
 projects: []
 ---
 
-<!-- <style> -->
-<!-- body { -->
-<!--   background-color: #bbdefb; /* Set your desired background color */ -->
-<!-- } -->
-<!-- </style> -->
+<style>
+body {
+  background-color: #D8DEE4; /* Set your desired background color */
+}
+</style>
 
 
 ### Introduction
 
-The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__  or __[Presentation](https://www.youtube.com/watch?v=lZTDcP8hacE&list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&index=2&t=1224s)__ by JB Morin and/or the following scientific papers: 
+The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game recording of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the __[blogpost](https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/)__  or __[Presentation](https://www.youtube.com/watch?v=lZTDcP8hacE&list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&index=2&t=1224s)__ by JB Morin and/or the following scientific papers: 
 
 * __[Individual acceleration-speed profile in-situ: A proof of concept in professional football players](https://pubmed.ncbi.nlm.nih.gov/34023754/)__
 * __[Reliability of individual acceleration-speed profile in-situ in elite youth soccer players](https://pubmed.ncbi.nlm.nih.gov/37163953/)__
@@ -37,9 +37,9 @@ Only a few GPS providers allow for the calculation of the AS profile in the clou
 
 Although this seems easy enough, several training sessions are needed for a valid and reliable estimation of the AS profile (see linked papers above), thus calculating the AS profile for a whole squad can easily mean that 100-200 .csv files need to be downloaded (typically 1 file per player per session with 30.000-100.000 rows depending on the session duration). This quickly becomes very tedious work!
 
-### The easy way using the CatapultR Package and R Studio
+### The easier way using the CatapultR Package and R Studio
 
-Another, and much easier, method (at least if working with Catapult GPS data) is to leverage the power of R and the __[catapultR package](http://catapultr.catapultsports.com/)__ which serves as a wrapper for the Catapult API. This essentially means that no manual downloading of .csv files are needed. 
+Another, and much easier, method (at least if working with Catapult GPS data) is to leverage the power of R and the __[catapultR package](http://catapultr.catapultsports.com/)__ which serves as a wrapper for the Catapult API. This essentially means that no manual downloading of .csv files are needed. Below, I will show you step by step how you can use the CatapultR package to download the raw GPS 10Hz data. 
 
 To get started in R Studio, I load the following packages:
 ```{r load libraries, echo=TRUE, message=FALSE}
@@ -50,7 +50,7 @@ library(lubridate)
 
 ```
 
-and set a few placeholder variables and the API connection:
+...and set a few placeholder variables and the API connection:
 ```{r placeholder, echo=TRUE, eval=FALSE}
 
 #Set player name, and date range for the data of interest
@@ -126,7 +126,7 @@ rawData[[i]] <- ofCloudGetActivitySensorData(
 
 ```
 
-Now that I have the raw 10Hz sensor data for each activity extracted and in a list, I use the "map" (that applies a function on a list) and "unnest" functions to unnest to gps variables for each activity:
+Now that I have the raw 10Hz sensor data for each activity extracted and in a list, I use the "map" (that applies a function on a list) and "unnest" functions to unnest the gps variables for each activity:
 
 ```{r map, echo=TRUE, eval=FALSE}
 
@@ -190,7 +190,7 @@ token <- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)
 }
 ```
 
-The final step I need to solve before I can use the function is to identify the __sToken__ and the __sRegion__ (These are text strings used to access your user profile via the API, and can can be found in the Catapult Cloud). With that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:
+The final step I need to solve before I can use the function is to identify the __sToken__ and the __sRegion__ (These are text strings used to access your user profile via the API, and can be found in the Catapult Cloud). With that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:
 
 ```{r get data example,  echo=TRUE, eval=FALSE}
 
@@ -202,6 +202,7 @@ data <- get_raw_data(name = "Player A",
                             sregion = "xxx")
 
 ```
+
 
 The data comes in a list format, with each list representing an activity. For this example, I get 4 activities (training sessions only), which is on the low end for obtaining a reliable AS profile, but that is not the main focus for now.
 
@@ -224,6 +225,36 @@ data[[1]] %>%
 
 
 ```
+
+
+
+### Dealing with API limits
+
+Because the function pulls raw 10Hz GPS data through the Catapult API, you are calling for a large amount of data. Depending on the date range (determined by startDate and endDate parameters), you may experience that you get fewer than expected activities or simply empty activities. This may even happen if your date range span 5 days. I reckon this may be due to reaching the API limit for the call. The obvious way to solve this is to repeat the function with different start and end dates until you have your days covered, and then bind the outputs into a single data frame. However, in the long run, this is not very feasible. A cleaner is to leverage the power of the __Purr package__ from the __Tidyverse__ collection, to loop over our function using consecutive dates. In this way, we can run the function in small parts and thus overcome the potential issue of reaching the API limit. This is potentially very powerful, so please use it with respect as there is a reason for the API limit. In our specific case, a date range of 7-10 days should be sufficient.
+
+
+```{r get data using the purr,  echo=TRUE, eval=FALSE}
+
+# I first define the date range and sequence of start dates - I use the seq function to 
+# create consecutive days within the range, and minus by 1, 
+# since the end date will by the start date + 1
+start_dates_list <- seq(dmy("05-01-2024"), dmy("10-01-2024") - 1, by = "days")
+end_dates_list <- start_dates_list + 1
+
+
+# The trick now is to use the map2 function, to loop over combinations of start and end dates
+# applying those to the get_raw_data function
+data <- map2(start_dates_list, end_dates_list, ~ get_raw_data(
+  name = "Player A",
+  startdate = format(.x, "%d-%m-%Y"),
+  enddate = format(.y, "%d-%m-%Y"),
+  stoken = stoken,
+  sregion = sregion
+))
+
+```
+
+Essentially what happens in the code is that the get_raw_data function runs five times, starting with a start date of "05-01-2024" and an end date of "06-01-2024", then a start date of "06-01-2024" and an end date of "07-01-2024", etc., until having covered the entire date range.
 
 #### Preparation of the raw data
 

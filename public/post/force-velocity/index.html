@@ -344,10 +344,10 @@
     
       <meta
         property="article:published_time"
-        content="2024-05-29T00:00:00&#43;00:00"
+        content="2024-11-06T00:00:00&#43;00:00"
       />
     
-    <meta property="article:modified_time" content="2024-05-29T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2024-11-06T00:00:00&#43;00:00">
   
 
   
@@ -379,8 +379,8 @@
     "https://lasseishoi.netlify.app/post/force-velocity/featured.png"
   ],
   
-  "datePublished": "2024-05-29T00:00:00Z",
-  "dateModified": "2024-05-29T00:00:00Z",
+  "datePublished": "2024-11-06T00:00:00Z",
+  "dateModified": "2024-11-06T00:00:00Z",
   
   "author": {
     "@type": "Person",
@@ -775,7 +775,7 @@
   <h1>In Situ Acceleration-Speed Profile</h1>
 
   
-  <p class="page-subtitle">Automisation using using the CatapultR package</p>
+  <p class="page-subtitle">Towards automisation using the CatapultR package</p>
   
 
   
@@ -792,7 +792,7 @@
     
       
     
-    May 29, 2024
+    Nov 6, 2024
   </span>
   
 
@@ -801,7 +801,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    9 min read
+    11 min read
   </span>
   
 
@@ -841,14 +841,14 @@
       
 
 
-<!-- <style> -->
-<!-- body { -->
-<!--   background-color: #bbdefb; /* Set your desired background color */ -->
-<!-- } -->
-<!-- </style> -->
+<style>
+body {
+  background-color: #D8DEE4; /* Set your desired background color */
+}
+</style>
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
-<p>The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game mapping of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the <strong><a href="https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/">blogpost</a></strong> or <strong><a href="https://www.youtube.com/watch?v=lZTDcP8hacE&amp;list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&amp;index=2&amp;t=1224s">Presentation</a></strong> by JB Morin and/or the following scientific papers:</p>
+<p>The In Situ Acceleration-Speed (AS) Profile has gained increasing popularity since introduced by JB Morin and team in 2021. Briefly described, the AS profile is in-game recording of the maximal acceleration and speed capabilities based on instantaneous acceleration and speed data from GPS or equivalent tracking devices from multiple training sessions/games. For an in depth overview of the concept, a good place to start is the <strong><a href="https://jbmorin.net/2021/07/29/the-in-situ-sprint-profile-for-team-sports-testing-players-without-testing-them/">blogpost</a></strong> or <strong><a href="https://www.youtube.com/watch?v=lZTDcP8hacE&amp;list=PLtdwe9oxCz-mBOVFfqnPs25Ru-2NDG6mz&amp;index=2&amp;t=1224s">Presentation</a></strong> by JB Morin and/or the following scientific papers:</p>
 <ul>
 <li><strong><a href="https://pubmed.ncbi.nlm.nih.gov/34023754/">Individual acceleration-speed profile in-situ: A proof of concept in professional football players</a></strong></li>
 <li><strong><a href="https://pubmed.ncbi.nlm.nih.gov/37163953/">Reliability of individual acceleration-speed profile in-situ in elite youth soccer players</a></strong></li>
@@ -860,14 +860,14 @@
 <p>Only a few GPS providers allow for the calculation of the AS profile in the cloud using proprietary software, so being able to calculate the AS profile yourself may be valuable. Luckily, this can be simply done by using the <strong><a href="https://libm-lab.univ-st-etienne.fr/as-profile/#/home">web application</a></strong> by Yann Le Mat - all it takes is to upload the raw GPS data as a .csv file.</p>
 <p>Although this seems easy enough, several training sessions are needed for a valid and reliable estimation of the AS profile (see linked papers above), thus calculating the AS profile for a whole squad can easily mean that 100-200 .csv files need to be downloaded (typically 1 file per player per session with 30.000-100.000 rows depending on the session duration). This quickly becomes very tedious work!</p>
 </div>
-<div id="the-easy-way-using-the-catapultr-package-and-r-studio" class="section level3">
-<h3>The easy way using the CatapultR Package and R Studio</h3>
-<p>Another, and much easier, method (at least if working with Catapult GPS data) is to leverage the power of R and the <strong><a href="http://catapultr.catapultsports.com/">catapultR package</a></strong> which serves as a wrapper for the Catapult API. This essentially means that no manual downloading of .csv files are needed.</p>
+<div id="the-easier-way-using-the-catapultr-package-and-r-studio" class="section level3">
+<h3>The easier way using the CatapultR Package and R Studio</h3>
+<p>Another, and much easier, method (at least if working with Catapult GPS data) is to leverage the power of R and the <strong><a href="http://catapultr.catapultsports.com/">catapultR package</a></strong> which serves as a wrapper for the Catapult API. This essentially means that no manual downloading of .csv files are needed. Below, I will show you step by step how you can use the CatapultR package to download the raw GPS 10Hz data.</p>
 <p>To get started in R Studio, I load the following packages:</p>
 <pre class="r"><code>library(catapultR)
 library(tidyverse)
 library(lubridate)</code></pre>
-<p>and set a few placeholder variables and the API connection:</p>
+<p>…and set a few placeholder variables and the API connection:</p>
 <pre class="r"><code>#Set player name, and date range for the data of interest
 playerName &lt;- name
 startDate &lt;- startdate
@@ -925,7 +925,7 @@ rawData[[i]] &lt;- ofCloudGetActivitySensorData(
                  &quot;hdop&quot;)), 
   silent = TRUE)
 }</code></pre>
-<p>Now that I have the raw 10Hz sensor data for each activity extracted and in a list, I use the “map” (that applies a function on a list) and “unnest” functions to unnest to gps variables for each activity:</p>
+<p>Now that I have the raw 10Hz sensor data for each activity extracted and in a list, I use the “map” (that applies a function on a list) and “unnest” functions to unnest the gps variables for each activity:</p>
 <pre class="r"><code># Map function to unnest the data (gps variables) column across the list. 
 # &quot;Possibly&quot; function secures that the unnest function does not stop due to error
 
@@ -971,7 +971,7 @@ token &lt;- ofCloudCreateToken(sToken = sToken,  sRegion = sRegion)
 ...
 
 }</code></pre>
-<p>The final step I need to solve before I can use the function is to identify the <strong>sToken</strong> and the <strong>sRegion</strong> (These are text strings used to access your user profile via the API, and can can be found in the Catapult Cloud). With that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:</p>
+<p>The final step I need to solve before I can use the function is to identify the <strong>sToken</strong> and the <strong>sRegion</strong> (These are text strings used to access your user profile via the API, and can be found in the Catapult Cloud). With that in place, I am ready to collect some raw 10 Hz data by simply adding the parameters to the function:</p>
 <pre class="r"><code>#I want to get data from Player A in date range 5th to 10th January 2024
 data &lt;- get_raw_data(name = &quot;Player A&quot;, 
                             startdate = &quot;05-01-2024&quot;, 
@@ -1206,6 +1206,27 @@ NA
 </tr>
 </tbody>
 </table>
+</div>
+<div id="dealing-with-api-limits" class="section level3">
+<h3>Dealing with API limits</h3>
+<p>Because the function pulls raw 10Hz GPS data through the Catapult API, you are calling for a large amount of data. Depending on the date range (determined by startDate and endDate parameters), you may experience that you get fewer than expected activities or simply empty activities. This may even happen if your date range span 5 days. I reckon this may be due to reaching the API limit for the call. The obvious way to solve this is to repeat the function with different start and end dates until you have your days covered, and then bind the outputs into a single data frame. However, in the long run, this is not very feasible. A cleaner is to leverage the power of the <strong>Purr package</strong> from the <strong>Tidyverse</strong> collection, to loop over our function using consecutive dates. In this way, we can run the function in small parts and thus overcome the potential issue of reaching the API limit. This is potentially very powerful, so please use it with respect as there is a reason for the API limit. In our specific case, a date range of 7-10 days should be sufficient.</p>
+<pre class="r"><code># I first define the date range and sequence of start dates - I use the seq function to 
+# create consecutive days within the range, and minus by 1, 
+# since the end date will by the start date + 1
+start_dates_list &lt;- seq(dmy(&quot;05-01-2024&quot;), dmy(&quot;10-01-2024&quot;) - 1, by = &quot;days&quot;)
+end_dates_list &lt;- start_dates_list + 1
+
+
+# The trick now is to use the map2 function, to loop over combinations of start and end dates
+# applying those to the get_raw_data function
+data &lt;- map2(start_dates_list, end_dates_list, ~ get_raw_data(
+  name = &quot;Player A&quot;,
+  startdate = format(.x, &quot;%d-%m-%Y&quot;),
+  enddate = format(.y, &quot;%d-%m-%Y&quot;),
+  stoken = stoken,
+  sregion = sregion
+))</code></pre>
+<p>Essentially what happens in the code is that the get_raw_data function runs five times, starting with a start date of “05-01-2024” and an end date of “06-01-2024”, then a start date of “06-01-2024” and an end date of “07-01-2024”, etc., until having covered the entire date range.</p>
 <div id="preparation-of-the-raw-data" class="section level4">
 <h4>Preparation of the raw data</h4>
 <p>For the preparation of the speed acceleration data, I use the <strong>Signal</strong> package and a butterworth filter as outlined in <strong><a href="https://www.sciencedirect.com/science/article/abs/pii/S0021929023001719">Clavel et al., 2023</a></strong>.</p>
