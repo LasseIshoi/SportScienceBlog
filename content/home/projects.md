@@ -46,4 +46,4 @@ design:
     text_color_light: false
 ---
 
-A collection of my R packages. These are light weight packages mainly developed for my own daily practice.
+A collection of my R packages and public Shiny Applications. These are light weight tools developed to ease various processes.
