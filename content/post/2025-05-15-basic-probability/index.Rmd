@@ -1,0 +1,24 @@
+---
+title: Basic Probability
+author: ''
+date: '2025-05-15'
+math: true
+slug: basic-probability
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-05-15T11:25:37+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+$$
+P(E_1 \cap E_2) = P(E_1) \cdot P(E_2 \mid E_1), \quad \text{where } P(E_2 \mid E_1) = \frac{P(E_1 \cap E_2)}{P(E_1)}
+$$
