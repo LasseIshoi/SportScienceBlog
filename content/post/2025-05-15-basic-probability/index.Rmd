@@ -1,13 +1,17 @@
 ---
-title: Basic Probability
+title: Probability Distributions
+output:
+  blogdown::html_page:
+    toc: true
 author: ''
 date: '2025-05-15'
 math: true
-slug: basic-probability
+toc: true
+slug: probability
 categories: []
 tags: []
-subtitle: ''
-summary: ''
+subtitle: 'A gentle introduction'
+summary: 'A gentle introduction to probability'
 authors: []
 lastmod: '2025-05-15T11:25:37+02:00'
 featured: no
@@ -18,7 +22,195 @@ image:
 projects: []
 ---
 
+<style>
+body, .container, .content, .post-content, .article-content {
+  max-width: 1000px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+# Binomial Distribution
+
+### Generate random sequence of bernoulli trials (e.g. coin flips)
+```{r rbinom function}
+
+
+
+rbinom(n=10, # 10 times
+       size=1, # one trial (i.e. one throw)
+       prob=0.3) # probability of success
+
+
+rbinom(n=10, # 10 times
+       size=100, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=0.3) # probability of success
+
+
+```
+
+
+```{r binomial distribution histogram}
+
+flips <- rbinom(n=100000, # 10 times
+          size=10, #trials (i.e. n throws) - output is then #number of successes
+          prob=0.5) # probability of success
+
+hist(x = flips)
+
+
+```
+
+
+
+### probability mass function
+
+The probability Mass function of the binomial distribution is given by: 
 
 $$
-P(E_1 \cap E_2) = P(E_1) \cdot P(E_2 \mid E_1), \quad \text{where } P(E_2 \mid E_1) = \frac{P(E_1 \cap E_2)}{P(E_1)}
+P(X) = \frac{n!}{x!(n-x)!} p^x q^{n-x}
 $$
+Where:
+
+- \( n \): number of trials (e.g., flips)  
+- \( p \): probability of success  
+- \( q = 1 - p \)  
+- Factorial: \( m! \) follows \( 0! = 1, 1! = 1, 2! = 2 \times 1, 3! = 3 \times 2 \times 1 \), etc.
+
+
+The first part of the function is called **The binomial coefficient**, and it counts the number of ways x subjects can be drawn (choosen) from a population, n, and is expressed as n chooses x: 
+
+$$
+\binom{n}{x} = \frac{n!}{x!(n-x)!}
+$$
+Where: 
+
+- \( n \): is the population 
+- \( x \): is the number drawn  
+
+```{r binom prob of x successes}
+
+#define parameters
+x <- 5 # number of success
+n <- 10 # size of population 
+p <- 0.5 # probability of success
+
+#Exact probability using the probability mass function
+
+#define  function
+binom_pmf <- function(x, n, p) {
+  
+  q <- 1-p
+  
+  binom_coef <- choose(n = n, k = x)
+  
+  binom_coef * p^x * q^(n-x)
+  
+}
+
+binom_pmf(x = x, n = n, p = p)
+
+
+#Exact probability using in-built r function
+dbinom(x = x, 
+       size = n, 
+       prob = p)
+
+#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) == 5)
+
+```
+
+
+## Calculate probability of at least x number of successes
+
+
+```{r binom prob of at least x successes}
+
+#Exact probability
+#Cumulative function - to find at least use the complementary probability
+1- pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5) # probability
+
+#or use the lower.tail = FALSE (P[X > x])
+pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5, lower.tail = FALSE) # probability
+
+
+#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) >= 5)
+
+
+
+#simulate several probabilities with different size using map
+n <- c(100, 1000, 10000, 100000)
+
+
+map_dbl(.x = n, ~mean(rbinom(n = .x,
+        size=10,
+        prob=0.5) >= 5))
+
+
+
+```
+## Expected value and variance
+
+
+
+```{r binom expectation and variance}
+
+#Expected value
+size <- 100
+prob <- 0.8
+
+#Simulation
+mean(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success
+
+#Expected value rule
+size*prob
+
+
+#variance
+
+#simulation
+var(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success
+
+#Variance rule
+size*prob*(1-prob)
+
+
+```
+
+
+```{r sda}
+density <- function(x) {20/x^2}
+
+integrate(density, lower = 10, upper = 20)
+
+
+
+dbinom(2, 5, 0.9)
+
+
+```

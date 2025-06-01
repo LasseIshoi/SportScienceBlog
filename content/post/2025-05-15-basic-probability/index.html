@@ -1,13 +1,17 @@
 ---
-title: Basic Probability
+title: Probability Distributions
+output:
+  blogdown::html_page:
+    toc: true
 author: ''
 date: '2025-05-15'
 math: true
-slug: basic-probability
+toc: true
+slug: probability
 categories: []
 tags: []
-subtitle: ''
-summary: ''
+subtitle: 'A gentle introduction'
+summary: 'A gentle introduction to probability'
 authors: []
 lastmod: '2025-05-15T11:25:37+02:00'
 featured: no
@@ -19,7 +23,159 @@ projects: []
 ---
 
 
+<div id="TOC">
+<ul>
+<li><a href="#binomial-distribution" id="toc-binomial-distribution">Binomial Distribution</a>
+<ul>
+<li><a href="#generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips" id="toc-generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips">Generate random sequence of bernoulli trials (e.g. coin flips)</a></li>
+<li><a href="#probability-mass-function" id="toc-probability-mass-function">probability mass function</a></li>
+<li><a href="#calculate-probability-of-at-least-x-number-of-successes" id="toc-calculate-probability-of-at-least-x-number-of-successes">Calculate probability of at least x number of successes</a></li>
+<li><a href="#expected-value-and-variance" id="toc-expected-value-and-variance">Expected value and variance</a></li>
+</ul></li>
+</ul>
+</div>
 
+<style>
+body, .container, .content, .post-content, .article-content {
+  max-width: 1000px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+</style>
+<div id="binomial-distribution" class="section level1">
+<h1>Binomial Distribution</h1>
+<div id="generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips" class="section level3">
+<h3>Generate random sequence of bernoulli trials (e.g. coin flips)</h3>
+<pre class="r"><code>rbinom(n=10, # 10 times
+       size=1, # one trial (i.e. one throw)
+       prob=0.3) # probability of success</code></pre>
+<pre><code>##  [1] 1 1 0 0 1 0 1 0 0 1</code></pre>
+<pre class="r"><code>rbinom(n=10, # 10 times
+       size=100, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=0.3) # probability of success</code></pre>
+<pre><code>##  [1] 30 31 26 28 36 35 27 29 30 36</code></pre>
+<pre class="r"><code>flips &lt;- rbinom(n=100000, # 10 times
+          size=10, #trials (i.e. n throws) - output is then #number of successes
+          prob=0.5) # probability of success
+
+hist(x = flips)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/binomial%20distribution%20histogram-1.png" width="672" /></p>
+</div>
+<div id="probability-mass-function" class="section level3">
+<h3>probability mass function</h3>
+<p>The probability Mass function of the binomial distribution is given by:</p>
 <p><span class="math display">\[
-P(E_1 \cap E_2) = P(E_1) \cdot P(E_2 \mid E_1), \quad \text{where } P(E_2 \mid E_1) = \frac{P(E_1 \cap E_2)}{P(E_1)}
-\]</span></p>
+P(X) = \frac{n!}{x!(n-x)!} p^x q^{n-x}
+\]</span>
+Where:</p>
+<ul>
+<li><span class="math inline">\(n\)</span>: number of trials (e.g., flips)<br />
+</li>
+<li><span class="math inline">\(p\)</span>: probability of success<br />
+</li>
+<li><span class="math inline">\(q = 1 - p\)</span><br />
+</li>
+<li>Factorial: <span class="math inline">\(m!\)</span> follows <span class="math inline">\(0! = 1, 1! = 1, 2! = 2 \times 1, 3! = 3 \times 2 \times 1\)</span>, etc.</li>
+</ul>
+<p>The first part of the function is called <strong>The binomial coefficient</strong>, and it counts the number of ways x subjects can be drawn (choosen) from a population, n, and is expressed as n chooses x:</p>
+<p><span class="math display">\[
+\binom{n}{x} = \frac{n!}{x!(n-x)!}
+\]</span>
+Where:</p>
+<ul>
+<li><span class="math inline">\(n\)</span>: is the population</li>
+<li><span class="math inline">\(x\)</span>: is the number drawn</li>
+</ul>
+<pre class="r"><code>#define parameters
+x &lt;- 5 # number of success
+n &lt;- 10 # size of population 
+p &lt;- 0.5 # probability of success
+
+#Exact probability using the probability mass function
+
+#define  function
+binom_pmf &lt;- function(x, n, p) {
+  
+  q &lt;- 1-p
+  
+  binom_coef &lt;- choose(n = n, k = x)
+  
+  binom_coef * p^x * q^(n-x)
+  
+}
+
+binom_pmf(x = x, n = n, p = p)</code></pre>
+<pre><code>## [1] 0.2460938</code></pre>
+<pre class="r"><code>#Exact probability using in-built r function
+dbinom(x = x, 
+       size = n, 
+       prob = p)</code></pre>
+<pre><code>## [1] 0.2460938</code></pre>
+<pre class="r"><code>#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) == 5)</code></pre>
+<pre><code>## [1] 0.24399</code></pre>
+</div>
+<div id="calculate-probability-of-at-least-x-number-of-successes" class="section level2">
+<h2>Calculate probability of at least x number of successes</h2>
+<pre class="r"><code>#Exact probability
+#Cumulative function - to find at least use the complementary probability
+1- pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5) # probability</code></pre>
+<pre><code>## [1] 0.6230469</code></pre>
+<pre class="r"><code>#or use the lower.tail = FALSE (P[X &gt; x])
+pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5, lower.tail = FALSE) # probability</code></pre>
+<pre><code>## [1] 0.6230469</code></pre>
+<pre class="r"><code>#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) &gt;= 5)</code></pre>
+<pre><code>## [1] 0.62189</code></pre>
+<pre class="r"><code>#simulate several probabilities with different size using map
+n &lt;- c(100, 1000, 10000, 100000)
+
+
+map_dbl(.x = n, ~mean(rbinom(n = .x,
+        size=10,
+        prob=0.5) &gt;= 5))</code></pre>
+<pre><code>## [1] 0.67000 0.59800 0.61750 0.62137</code></pre>
+</div>
+<div id="expected-value-and-variance" class="section level2">
+<h2>Expected value and variance</h2>
+<pre class="r"><code>#Expected value
+size &lt;- 100
+prob &lt;- 0.8
+
+#Simulation
+mean(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success</code></pre>
+<pre><code>## [1] 80.3</code></pre>
+<pre class="r"><code>#Expected value rule
+size*prob</code></pre>
+<pre><code>## [1] 80</code></pre>
+<pre class="r"><code>#variance
+
+#simulation
+var(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success</code></pre>
+<pre><code>## [1] 11.15556</code></pre>
+<pre class="r"><code>#Variance rule
+size*prob*(1-prob)</code></pre>
+<pre><code>## [1] 16</code></pre>
+<pre class="r"><code>density &lt;- function(x) {20/x^2}
+
+integrate(density, lower = 10, upper = 20)</code></pre>
+<pre><code>## 1 with absolute error &lt; 1.1e-14</code></pre>
+<pre class="r"><code>dbinom(2, 5, 0.9)</code></pre>
+<pre><code>## [1] 0.0081</code></pre>
+</div>
+</div>

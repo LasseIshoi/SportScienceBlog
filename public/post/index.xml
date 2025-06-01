@@ -13,16 +13,168 @@
     </image>
     
     <item>
-      <title>Basic Probability</title>
-      <link>https://lasseishoi.netlify.app/post/basic-probability/</link>
+      <title>Probability Distributions</title>
+      <link>https://lasseishoi.netlify.app/post/probability/</link>
       <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://lasseishoi.netlify.app/post/basic-probability/</guid>
+      <guid>https://lasseishoi.netlify.app/post/probability/</guid>
       <description>
 
+&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#binomial-distribution&#34; id=&#34;toc-binomial-distribution&#34;&gt;Binomial Distribution&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips&#34; id=&#34;toc-generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips&#34;&gt;Generate random sequence of bernoulli trials (e.g. coin flips)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#probability-mass-function&#34; id=&#34;toc-probability-mass-function&#34;&gt;probability mass function&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#calculate-probability-of-at-least-x-number-of-successes&#34; id=&#34;toc-calculate-probability-of-at-least-x-number-of-successes&#34;&gt;Calculate probability of at least x number of successes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#expected-value-and-variance&#34; id=&#34;toc-expected-value-and-variance&#34;&gt;Expected value and variance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
 
+&lt;style&gt;
+body, .container, .content, .post-content, .article-content {
+  max-width: 1000px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+&lt;/style&gt;
+&lt;div id=&#34;binomial-distribution&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Binomial Distribution&lt;/h1&gt;
+&lt;div id=&#34;generate-random-sequence-of-bernoulli-trials-e.g.-coin-flips&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Generate random sequence of bernoulli trials (e.g. coin flips)&lt;/h3&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rbinom(n=10, # 10 times
+       size=1, # one trial (i.e. one throw)
+       prob=0.3) # probability of success&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] 1 1 0 0 1 0 1 0 0 1&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rbinom(n=10, # 10 times
+       size=100, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=0.3) # probability of success&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1] 30 31 26 28 36 35 27 29 30 36&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;flips &amp;lt;- rbinom(n=100000, # 10 times
+          size=10, #trials (i.e. n throws) - output is then #number of successes
+          prob=0.5) # probability of success
+
+hist(x = flips)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://lasseishoi.netlify.app/post/probability/index_files/figure-html/binomial%20distribution%20histogram-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;probability-mass-function&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;probability mass function&lt;/h3&gt;
+&lt;p&gt;The probability Mass function of the binomial distribution is given by:&lt;/p&gt;
 &lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
-P(E_1 \cap E_2) = P(E_1) \cdot P(E_2 \mid E_1), \quad \text{where } P(E_2 \mid E_1) = \frac{P(E_1 \cap E_2)}{P(E_1)}
-\]&lt;/span&gt;&lt;/p&gt;
+P(X) = \frac{n!}{x!(n-x)!} p^x q^{n-x}
+\]&lt;/span&gt;
+Where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;: number of trials (e.g., flips)&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;: probability of success&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;math inline&#34;&gt;\(q = 1 - p\)&lt;/span&gt;&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;Factorial: &lt;span class=&#34;math inline&#34;&gt;\(m!\)&lt;/span&gt; follows &lt;span class=&#34;math inline&#34;&gt;\(0! = 1, 1! = 1, 2! = 2 \times 1, 3! = 3 \times 2 \times 1\)&lt;/span&gt;, etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The first part of the function is called &lt;strong&gt;The binomial coefficient&lt;/strong&gt;, and it counts the number of ways x subjects can be drawn (choosen) from a population, n, and is expressed as n chooses x:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\binom{n}{x} = \frac{n!}{x!(n-x)!}
+\]&lt;/span&gt;
+Where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;: is the population&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;math inline&#34;&gt;\(x\)&lt;/span&gt;: is the number drawn&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#define parameters
+x &amp;lt;- 5 # number of success
+n &amp;lt;- 10 # size of population 
+p &amp;lt;- 0.5 # probability of success
+
+#Exact probability using the probability mass function
+
+#define  function
+binom_pmf &amp;lt;- function(x, n, p) {
+  
+  q &amp;lt;- 1-p
+  
+  binom_coef &amp;lt;- choose(n = n, k = x)
+  
+  binom_coef * p^x * q^(n-x)
+  
+}
+
+binom_pmf(x = x, n = n, p = p)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.2460938&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Exact probability using in-built r function
+dbinom(x = x, 
+       size = n, 
+       prob = p)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.2460938&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) == 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.24399&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;calculate-probability-of-at-least-x-number-of-successes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Calculate probability of at least x number of successes&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Exact probability
+#Cumulative function - to find at least use the complementary probability
+1- pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5) # probability&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.6230469&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#or use the lower.tail = FALSE (P[X &amp;gt; x])
+pbinom(q = 4, # 4 or less, (or at least five if using the complementary) 
+       size = 10, # number of throws
+       prob = 0.5, lower.tail = FALSE) # probability&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.6230469&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Simulated probability
+mean(rbinom(n=100000,
+        size=10,
+        prob=0.5) &amp;gt;= 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.62189&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#simulate several probabilities with different size using map
+n &amp;lt;- c(100, 1000, 10000, 100000)
+
+
+map_dbl(.x = n, ~mean(rbinom(n = .x,
+        size=10,
+        prob=0.5) &amp;gt;= 5))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.67000 0.59800 0.61750 0.62137&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;expected-value-and-variance&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Expected value and variance&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Expected value
+size &amp;lt;- 100
+prob &amp;lt;- 0.8
+
+#Simulation
+mean(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 80.3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Expected value rule
+size*prob&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 80&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#variance
+
+#simulation
+var(rbinom(n=10, # 10 times
+       size=size, # 100 trials (i.e. 100 throws) - output is then #number of successes
+       prob=prob)) # probability of success&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 11.15556&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Variance rule
+size*prob*(1-prob)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 16&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;density &amp;lt;- function(x) {20/x^2}
+
+integrate(density, lower = 10, upper = 20)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## 1 with absolute error &amp;lt; 1.1e-14&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dbinom(2, 5, 0.9)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.0081&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
 </description>
     </item>
     
